@@ -5,6 +5,7 @@ import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Completable
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.CompletableSubject
 import org.junit.Before
 import org.junit.Test
@@ -116,6 +117,12 @@ class LoginControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldNotHideLoaderOnDestroyWhenApiNotStarted() {
+        loginController.onDestroy()
+        verify(view, never()).hideLoader()
+    }
+
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
         loginController
                 .onLogin(login = login, password = password)
@@ -138,6 +145,9 @@ interface Login {
 }
 
 class LoginController(val api: Login.Api, val view: Login.View) {
+
+    var disposable: Disposable? = null
+
     fun onLogin(login: String, password: String) {
         when {
             login.isBlank() -> view.showEmptyLoginError()
@@ -147,9 +157,9 @@ class LoginController(val api: Login.Api, val view: Login.View) {
     }
 
     private fun login() {
-        api.login()
+        disposable = api.login()
                 .doOnSubscribe { view.showLoader() }
-                .doOnTerminate { view.hideLoader() }
+                .doFinally { view.hideLoader() }
                 .subscribe({
                     view.openNextScreen()
                 }, {
@@ -158,6 +168,6 @@ class LoginController(val api: Login.Api, val view: Login.View) {
     }
 
     fun onDestroy() {
-        view.hideLoader()
+        disposable?.dispose()
     }
 }
