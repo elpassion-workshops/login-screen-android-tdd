@@ -46,6 +46,12 @@ class ExampleUnitTest {
         verify(view).showEmptyPasswordError()
     }
 
+    @Test
+    fun shouldNotShowEmptyLoginErrorWhenOnlyPasswordIsEmpty() {
+        login(password = "")
+        verify(view, never()).showEmptyLoginError()
+    }
+
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
         LoginController(api, view)
                 .onLogin(login = login, password = password)
@@ -65,11 +71,10 @@ interface Login {
 
 class LoginController(val api: Login.Api, val view: Login.View) {
     fun onLogin(login: String, password: String) {
-        if (login.isNotBlank() && password.isNotBlank()) {
-            api.login()
-        } else {
-            view.showEmptyLoginError()
-            view.showEmptyPasswordError()
+        when {
+            login.isBlank() -> view.showEmptyLoginError()
+            password.isBlank() -> view.showEmptyPasswordError()
+            else -> api.login()
         }
     }
 }
