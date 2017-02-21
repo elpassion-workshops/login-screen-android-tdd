@@ -7,6 +7,7 @@ import org.junit.Test
 
 class ExampleUnitTest {
 
+    private val view = mock<Login.View>()
     private val api = mock<Login.Api>()
 
     @Test
@@ -21,8 +22,14 @@ class ExampleUnitTest {
         verify(api, never()).login()
     }
 
+    @Test
+    fun shouldShowErrorIfLoginIsEmpty() {
+        login(login = "")
+        verify(view).showEmptyLoginError()
+    }
+
     private fun login(login: String) {
-        LoginController(api).onLogin(login = login)
+        LoginController(api, view).onLogin(login = login)
     }
 }
 
@@ -31,12 +38,18 @@ interface Login {
         fun login()
     }
 
+    interface View {
+        fun showEmptyLoginError()
+    }
+
 }
 
-class LoginController(val api: Login.Api) {
+class LoginController(val api: Login.Api, val view: Login.View) {
     fun onLogin(login: String) {
         if (login.isNotBlank()) {
             api.login()
+        } else {
+            view.showEmptyLoginError()
         }
     }
 
