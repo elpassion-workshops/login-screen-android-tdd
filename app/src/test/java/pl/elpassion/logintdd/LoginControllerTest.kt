@@ -14,6 +14,7 @@ class LoginControllerTest {
     private val view = mock<Login.View>()
     private val api = mock<Login.Api>()
     private val apiSubject = CompletableSubject.create()
+    private val loginController = LoginController(api, view)
 
     @Before
     fun setUp() {
@@ -108,8 +109,14 @@ class LoginControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldHideLoaderOnDestroy() {
+        login()
+        loginController.onDestroy()
+    }
+
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
-        LoginController(api, view)
+        loginController
                 .onLogin(login = login, password = password)
     }
 }
@@ -147,5 +154,9 @@ class LoginController(val api: Login.Api, val view: Login.View) {
                 }, {
                     view.showLoginFailed()
                 })
+    }
+
+    fun onDestroy() {
+        view.hideLoader()
     }
 }
