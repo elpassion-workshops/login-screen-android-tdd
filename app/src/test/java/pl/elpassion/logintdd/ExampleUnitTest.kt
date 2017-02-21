@@ -75,6 +75,13 @@ class ExampleUnitTest {
         verify(view, never()).openNextScreen()
     }
 
+    @Test
+    fun shouldShowErrorWhenApiLoginFails() {
+        login()
+        apiSubject.onError(RuntimeException())
+        verify(view).showLoginFailed()
+    }
+
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
         LoginController(api, view)
                 .onLogin(login = login, password = password)
@@ -90,6 +97,7 @@ interface Login {
         fun showEmptyLoginError()
         fun showEmptyPasswordError()
         fun openNextScreen()
+        fun showLoginFailed()
     }
 }
 
@@ -103,8 +111,10 @@ class LoginController(val api: Login.Api, val view: Login.View) {
     }
 
     private fun login() {
-        api.login().subscribe {
+        api.login().subscribe({
             view.openNextScreen()
-        }
+        }, {
+            view.showLoginFailed()
+        })
     }
 }
