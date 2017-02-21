@@ -7,22 +7,23 @@ import org.junit.Test
 
 class ExampleUnitTest {
 
+    private val api = mock<Login.Api>()
+
     @Test
     fun shouldCallApiOnLogin() {
-        val api = mock<Login.Api>()
-        LoginController(api).onLogin(login = "login")
-
+        login(login = "login")
         verify(api).login()
     }
 
     @Test
     fun shouldNotCallApiWhenLoginIsBlank() {
-        val api = mock<Login.Api>()
-        LoginController(api).onLogin(login = "")
-
+        login(login = "")
         verify(api, never()).login()
     }
 
+    private fun login(login: String) {
+        LoginController(api).onLogin(login = login)
+    }
 }
 
 interface Login {
