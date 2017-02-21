@@ -52,6 +52,12 @@ class ExampleUnitTest {
         verify(view, never()).showEmptyLoginError()
     }
 
+    @Test
+    fun shouldOpenNextScreenOnLoginSuccess() {
+        login()
+        verify(view).openNextScreen()
+    }
+
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
         LoginController(api, view)
                 .onLogin(login = login, password = password)
@@ -66,6 +72,7 @@ interface Login {
     interface View {
         fun showEmptyLoginError()
         fun showEmptyPasswordError()
+        fun openNextScreen()
     }
 }
 
@@ -74,7 +81,10 @@ class LoginController(val api: Login.Api, val view: Login.View) {
         when {
             login.isBlank() -> view.showEmptyLoginError()
             password.isBlank() -> view.showEmptyPasswordError()
-            else -> api.login()
+            else -> {
+                api.login()
+                view.openNextScreen()
+            }
         }
     }
 }
