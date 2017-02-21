@@ -34,8 +34,15 @@ class ExampleUnitTest {
         verify(view, never()).showEmptyLoginError()
     }
 
-    private fun login(login: String) {
-        LoginController(api, view).onLogin(login = login)
+    @Test
+    fun shouldNotCallApiWhenPasswordIsEmpty() {
+        login(password = "")
+        verify(api, never()).login()
+    }
+
+    private fun login(login: String = "correctLogin", password: String = "correctPassword") {
+        LoginController(api, view)
+                .onLogin(login = login, password = password)
     }
 }
 
@@ -51,8 +58,8 @@ interface Login {
 }
 
 class LoginController(val api: Login.Api, val view: Login.View) {
-    fun onLogin(login: String) {
-        if (login.isNotBlank()) {
+    fun onLogin(login: String, password: String) {
+        if (login.isNotBlank() && password.isNotBlank()) {
             api.login()
         } else {
             view.showEmptyLoginError()
