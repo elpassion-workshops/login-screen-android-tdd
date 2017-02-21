@@ -3,12 +3,22 @@ package pl.elpassion.logintdd
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Completable
+import io.reactivex.subjects.CompletableSubject
+import org.junit.Before
 import org.junit.Test
 
 class ExampleUnitTest {
 
     private val view = mock<Login.View>()
     private val api = mock<Login.Api>()
+    private val apiSubject = CompletableSubject.create()
+
+    @Before
+    fun setUp() {
+        whenever(api.login()).thenReturn(apiSubject)
+    }
 
     @Test
     fun shouldCallApiOnLogin() {
@@ -55,7 +65,14 @@ class ExampleUnitTest {
     @Test
     fun shouldOpenNextScreenOnLoginSuccess() {
         login()
+        apiSubject.onComplete()
         verify(view).openNextScreen()
+    }
+
+    @Test
+    fun shouldNotOpenNextScreenUntilApiCompletes() {
+        login()
+        verify(view, never()).openNextScreen()
     }
 
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
@@ -66,7 +83,7 @@ class ExampleUnitTest {
 
 interface Login {
     interface Api {
-        fun login()
+        fun login(): Completable
     }
 
     interface View {
@@ -81,10 +98,13 @@ class LoginController(val api: Login.Api, val view: Login.View) {
         when {
             login.isBlank() -> view.showEmptyLoginError()
             password.isBlank() -> view.showEmptyPasswordError()
-            else -> {
-                api.login()
-                view.openNextScreen()
-            }
+            else -> login()
+        }
+    }
+
+    private fun login() {
+        api.login().subscribe {
+            view.openNextScreen()
         }
     }
 }
