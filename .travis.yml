@@ -15,3 +15,6 @@ before_install:
 
 after_script:
   - adb logcat -d
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
