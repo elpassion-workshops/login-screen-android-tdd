@@ -1,15 +1,31 @@
 package pl.elpassion.logintdd
 
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import org.junit.Test
 
 class ExampleUnitTest {
 
     @Test
-    fun initTest() {
-         LoginController()
+    fun shouldCallApiOnLogin() {
+        val api = mock<Login.Api>()
+        LoginController(api).onLogin()
+
+        verify(api).login()
     }
+
 }
 
-class LoginController {
+interface Login {
+    interface Api {
+        fun login()
+    }
+
+}
+
+class LoginController(val api: Login.Api) {
+    fun onLogin() {
+        api.login()
+    }
 
 }
