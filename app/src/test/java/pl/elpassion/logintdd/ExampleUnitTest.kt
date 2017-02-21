@@ -101,6 +101,13 @@ class ExampleUnitTest {
         verify(view, never()).hideLoader()
     }
 
+    @Test
+    fun shouldHideLoaderWhenApiFails() {
+        login()
+        apiSubject.onError(RuntimeException())
+        verify(view).hideLoader()
+    }
+
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
         LoginController(api, view)
                 .onLogin(login = login, password = password)
@@ -134,7 +141,7 @@ class LoginController(val api: Login.Api, val view: Login.View) {
     private fun login() {
         api.login()
                 .doOnSubscribe { view.showLoader() }
-                .doOnComplete { view.hideLoader() }
+                .doOnTerminate { view.hideLoader() }
                 .subscribe({
                     view.openNextScreen()
                 }, {
