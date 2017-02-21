@@ -48,9 +48,8 @@ class LoginController(val api: Login.Api, val view: Login.View) {
     fun onLogin(login: String) {
         if (login.isNotBlank()) {
             api.login()
-        } else {
-            view.showEmptyLoginError()
         }
+        view.showEmptyLoginError()
     }
 
 }
