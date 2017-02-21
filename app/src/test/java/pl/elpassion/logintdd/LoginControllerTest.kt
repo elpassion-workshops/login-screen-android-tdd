@@ -113,6 +113,7 @@ class LoginControllerTest {
     fun shouldHideLoaderOnDestroy() {
         login()
         loginController.onDestroy()
+        verify(view).hideLoader()
     }
 
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
