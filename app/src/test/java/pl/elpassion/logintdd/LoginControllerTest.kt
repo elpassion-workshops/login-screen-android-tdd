@@ -143,7 +143,7 @@ class LoginController(val api: Login.Api, val view: Login.View) {
         when {
             login.isBlank() -> view.showEmptyLoginError()
             password.isBlank() -> view.showEmptyPasswordError()
-            else -> login(login, password)
+            login.isNotBlank() -> login(login, password)
         }
     }
 
