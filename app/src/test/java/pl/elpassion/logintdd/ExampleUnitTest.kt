@@ -1,12 +1,15 @@
 package pl.elpassion.logintdd
 
-import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class ExampleUnitTest {
 
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, (2 + 2).toLong())
+    fun initTest() {
+         LoginController()
     }
+}
+
+class LoginController {
+
 }
