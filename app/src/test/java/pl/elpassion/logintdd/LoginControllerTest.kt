@@ -1,9 +1,6 @@
 package pl.elpassion.logintdd
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.CompletableSubject
@@ -19,19 +16,13 @@ class LoginControllerTest {
 
     @Before
     fun setUp() {
-        whenever(api.login()).thenReturn(apiSubject)
-    }
-
-    @Test
-    fun shouldCallApiOnLogin() {
-        login(login = "login")
-        verify(api).login()
+        whenever(api.login(any(), any())).thenReturn(apiSubject)
     }
 
     @Test
     fun shouldNotCallApiWhenLoginIsBlank() {
         login(login = "")
-        verify(api, never()).login()
+        verify(api, never()).login(any(), any())
     }
 
     @Test
@@ -42,14 +33,14 @@ class LoginControllerTest {
 
     @Test
     fun shouldNotShowErrorWhenLoginDataAreCorrect() {
-        login(login = "login")
+        login(login = "correctLogin")
         verify(view, never()).showEmptyLoginError()
     }
 
     @Test
     fun shouldNotCallApiWhenPasswordIsEmpty() {
         login(password = "")
-        verify(api, never()).login()
+        verify(api, never()).login(any(), any())
     }
 
     @Test
@@ -79,8 +70,8 @@ class LoginControllerTest {
 
     @Test
     fun shouldShowErrorWhenApiLoginFails() {
-        login()
-        apiSubject.onError(RuntimeException())
+        whenever(api.login("wrongLogin", "wrongPassword")).thenReturn(Completable.error(RuntimeException()))
+        login("wrongLogin", "wrongPassword")
         verify(view).showLoginFailed()
     }
 
@@ -131,7 +122,7 @@ class LoginControllerTest {
 
 interface Login {
     interface Api {
-        fun login(): Completable
+        fun login(login: String, password: String): Completable
     }
 
     interface View {
@@ -152,12 +143,12 @@ class LoginController(val api: Login.Api, val view: Login.View) {
         when {
             login.isBlank() -> view.showEmptyLoginError()
             password.isBlank() -> view.showEmptyPasswordError()
-            else -> login()
+            else -> login(login, password)
         }
     }
 
-    private fun login() {
-        disposable = api.login()
+    private fun login(login: String, password: String) {
+        disposable = api.login(login, password)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally { view.hideLoader() }
                 .subscribe({
