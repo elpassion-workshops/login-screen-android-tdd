@@ -9,7 +9,7 @@ import io.reactivex.subjects.CompletableSubject
 import org.junit.Before
 import org.junit.Test
 
-class ExampleUnitTest {
+class LoginControllerTest {
 
     private val view = mock<Login.View>()
     private val api = mock<Login.Api>()
