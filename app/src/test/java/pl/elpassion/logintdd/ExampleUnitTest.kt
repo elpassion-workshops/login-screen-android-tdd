@@ -28,6 +28,12 @@ class ExampleUnitTest {
         verify(view).showEmptyLoginError()
     }
 
+    @Test
+    fun shouldNotShowErrorWhenLoginDataAreCorrect() {
+        login(login = "login")
+        verify(view, never()).showEmptyLoginError()
+    }
+
     private fun login(login: String) {
         LoginController(api, view).onLogin(login = login)
     }
@@ -48,8 +54,9 @@ class LoginController(val api: Login.Api, val view: Login.View) {
     fun onLogin(login: String) {
         if (login.isNotBlank()) {
             api.login()
-        }
-        view.showEmptyLoginError()
-    }
+        } else {
+            view.showEmptyLoginError()
 
+        }
+    }
 }
