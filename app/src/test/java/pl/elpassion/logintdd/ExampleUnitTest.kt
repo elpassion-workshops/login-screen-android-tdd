@@ -82,6 +82,11 @@ class ExampleUnitTest {
         verify(view).showLoginFailed()
     }
 
+    @Test
+    fun shouldShowLoaderWhenCallingApi() {
+        login()
+        verify(view).showLoader()
+    }
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
         LoginController(api, view)
                 .onLogin(login = login, password = password)
@@ -98,6 +103,7 @@ interface Login {
         fun showEmptyPasswordError()
         fun openNextScreen()
         fun showLoginFailed()
+        fun showLoader()
     }
 }
 
@@ -111,6 +117,7 @@ class LoginController(val api: Login.Api, val view: Login.View) {
     }
 
     private fun login() {
+        view.showLoader()
         api.login().subscribe({
             view.openNextScreen()
         }, {
