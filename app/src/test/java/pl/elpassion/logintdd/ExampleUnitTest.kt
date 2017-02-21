@@ -87,6 +87,14 @@ class ExampleUnitTest {
         login()
         verify(view).showLoader()
     }
+
+    @Test
+    fun shouldHideLoaderWhenCallToApiEnds() {
+        login()
+        apiSubject.onComplete()
+        verify(view).hideLoader()
+    }
+
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
         LoginController(api, view)
                 .onLogin(login = login, password = password)
@@ -104,6 +112,7 @@ interface Login {
         fun openNextScreen()
         fun showLoginFailed()
         fun showLoader()
+        fun hideLoader()
     }
 }
 
@@ -123,5 +132,6 @@ class LoginController(val api: Login.Api, val view: Login.View) {
         }, {
             view.showLoginFailed()
         })
+        view.hideLoader()
     }
 }
