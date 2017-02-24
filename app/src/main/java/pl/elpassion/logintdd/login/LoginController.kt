@@ -2,9 +2,12 @@ package pl.elpassion.logintdd.login
 
 import io.reactivex.disposables.Disposable
 
-class LoginController(val api: Login.Api, val view: Login.View, val userRepository: Login.UserRepository) {
+class LoginController(
+        private val api: Login.Api,
+        private val view: Login.View,
+        private val userRepository: Login.UserRepository) {
 
-    var disposable: Disposable? = null
+    private var disposable: Disposable? = null
 
     fun onLogin(login: String, password: String) {
         when {
