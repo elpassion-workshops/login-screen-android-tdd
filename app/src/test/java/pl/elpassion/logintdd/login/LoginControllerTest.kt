@@ -1,4 +1,4 @@
-package pl.elpassion.logintdd
+package pl.elpassion.logintdd.login
 
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Completable
