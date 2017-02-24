@@ -1,8 +1,8 @@
 package pl.elpassion.logintdd.login
 
 import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Completable
-import io.reactivex.subjects.CompletableSubject
+import io.reactivex.Single
+import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 
@@ -10,8 +10,9 @@ class LoginControllerTest {
 
     private val view = mock<Login.View>()
     private val api = mock<Login.Api>()
-    private val apiSubject = CompletableSubject.create()
-    private val loginController = LoginController(api, view)
+    private val userRepository = mock<Login.UserRepository>()
+    private val apiSubject = SingleSubject.create<User>()
+    private val loginController = LoginController(api, view, userRepository)
 
     @Before
     fun setUp() {
@@ -57,7 +58,7 @@ class LoginControllerTest {
     @Test
     fun shouldOpenNextScreenOnLoginSuccess() {
         login()
-        apiSubject.onComplete()
+        apiSubject.onSuccess(newUser())
         verify(view).openNextScreen()
     }
 
@@ -69,7 +70,7 @@ class LoginControllerTest {
 
     @Test
     fun shouldShowErrorWhenApiLoginFails() {
-        whenever(api.login("wrongLogin", "wrongPassword")).thenReturn(Completable.error(RuntimeException()))
+        whenever(api.login("wrongLogin", "wrongPassword")).thenReturn(Single.error(RuntimeException()))
         login("wrongLogin", "wrongPassword")
         verify(view).showLoginFailed()
     }
@@ -83,7 +84,7 @@ class LoginControllerTest {
     @Test
     fun shouldHideLoaderWhenCallToApiEnds() {
         login()
-        apiSubject.onComplete()
+        apiSubject.onSuccess(newUser())
         verify(view).hideLoader()
     }
 
@@ -113,8 +114,19 @@ class LoginControllerTest {
         verify(view, never()).hideLoader()
     }
 
+    @Test
+    fun shouldSaveReturnedUserFromApi() {
+        val user = newUser(id = 2)
+        login()
+        apiSubject.onSuccess(user)
+        verify(userRepository).saveUser(user)
+    }
+
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
         loginController
                 .onLogin(login = login, password = password)
     }
+
+    private fun newUser(id: Long = 1) = User(id)
+
 }

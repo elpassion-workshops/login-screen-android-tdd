@@ -1,10 +1,10 @@
 package pl.elpassion.logintdd.login
 
-import io.reactivex.Completable
+import io.reactivex.Single
 
 interface Login {
     interface Api {
-        fun login(login: String, password: String): Completable
+        fun login(login: String, password: String): Single<User>
     }
 
     interface View {
@@ -14,5 +14,9 @@ interface Login {
         fun showLoginFailed()
         fun showLoader()
         fun hideLoader()
+    }
+
+    interface UserRepository {
+        fun saveUser(user: User)
     }
 }
