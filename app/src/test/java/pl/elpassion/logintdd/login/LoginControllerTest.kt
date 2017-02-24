@@ -2,7 +2,6 @@ package pl.elpassion.logintdd.login
 
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Completable
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.CompletableSubject
 import org.junit.Before
 import org.junit.Test
@@ -117,48 +116,5 @@ class LoginControllerTest {
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
         loginController
                 .onLogin(login = login, password = password)
-    }
-}
-
-interface Login {
-    interface Api {
-        fun login(login: String, password: String): Completable
-    }
-
-    interface View {
-        fun showEmptyLoginError()
-        fun showEmptyPasswordError()
-        fun openNextScreen()
-        fun showLoginFailed()
-        fun showLoader()
-        fun hideLoader()
-    }
-}
-
-class LoginController(val api: Login.Api, val view: Login.View) {
-
-    var disposable: Disposable? = null
-
-    fun onLogin(login: String, password: String) {
-        when {
-            login.isBlank() -> view.showEmptyLoginError()
-            password.isBlank() -> view.showEmptyPasswordError()
-            else -> login(login, password)
-        }
-    }
-
-    private fun login(login: String, password: String) {
-        disposable = api.login(login, password)
-                .doOnSubscribe { view.showLoader() }
-                .doFinally { view.hideLoader() }
-                .subscribe({
-                    view.openNextScreen()
-                }, {
-                    view.showLoginFailed()
-                })
-    }
-
-    fun onDestroy() {
-        disposable?.dispose()
     }
 }
