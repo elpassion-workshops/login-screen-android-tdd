@@ -18,3 +18,10 @@ after_script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  slack:
+  rooms:
+    secure: QzjWznc479vPPSN1JamTs8vTuzZ2thbtiC3JWdGDNLfIz05LNQ8AEPuR3yXM0lsFimtNll8kRDnXpfOTdlZ+t/3bN7FbJD0uLWNJFPlRAFL4hNlXnM8WxJ2Fb0VQrn+Q/V3Zv2tEXduS7YG6m5Czq/4fnXA/k8pb24y1tEHU3opW2uMKeipV4xF/YUO7mbeqeBvbKzNEdYtrGbtsKhc+zyDKEVkQZ0ROsWke95lUHV+spdC+DuTHb+9jsrtqRnhQxVdJezMXlGDPcyhkbVaAJ+F2L3Jxi31DW3PHnokDzKjVUuZ23BihYmdRFag7YQL9KsOvmXOQs68DXxMGwIVz17RLPWNi3bLJaNpApF4MKU3ybE7oPcUUZCtBKvSaN1JyXk2YaXo85MuQ6AVIyB1Ju5VAyjMfsgHRLuVt6Hg8j+0cVAvdJ9i5OW9N6BNRFU8p7u9B6v0I3EBqXyTQtSCe5jgKIyGLPmM91M8Ym4YApe3sleBUWnwTZ+TDtOxwwMZYKgrviRL37vv3R2W5PlMicTqfmqJ4Zbthk84eg4KKCANxjLZoQ1PmFWFwXLZlZxWJA/Z/tkRKcfnpHjtkd2KiElJuHSbM4anwK5PexakFECAjnybtKaiYD6scWp2F4NTHSFtPWPhrx+VS+gdLAyU4CEgolqTdKK4AtyYKjf3aog0=
+    on_success: change
+    on_failure: always
