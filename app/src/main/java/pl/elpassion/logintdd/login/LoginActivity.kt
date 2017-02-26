@@ -16,7 +16,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
                 override fun login(login: String, password: String) = Single.never<User>()
             }, this, object : Login.UserRepository {
                 override fun saveUser(user: User) = Unit
-            }).onLogin("","")
+            }).onLogin(loginInput.text.toString(), "")
         }
     }
 
@@ -24,9 +24,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
         loginEmptyError.show()
     }
 
-    override fun showEmptyPasswordError() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun showEmptyPasswordError() = Unit
 
     override fun openNextScreen() {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.

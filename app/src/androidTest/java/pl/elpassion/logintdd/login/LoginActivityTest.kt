@@ -54,4 +54,11 @@ class LoginActivityTest {
     fun shouldNotShowEmptyLoginErrorOnStart() {
         onText("Login cannot be empty").isNotDisplayed()
     }
+
+    @Test
+    fun shouldNotShowLoginEmptyErrorWhenLoginIsNotEmpty() {
+        onId(R.id.loginInput).typeText("email@test.com")
+        onId(R.id.loginButton).click()
+        onText("Login cannot be empty").isNotDisplayed()
+    }
 }
