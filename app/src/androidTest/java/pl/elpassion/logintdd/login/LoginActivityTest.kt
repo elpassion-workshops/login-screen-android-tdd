@@ -81,4 +81,12 @@ class LoginActivityTest {
         onId(R.id.loginButton).click()
         onText("Password cannot be empty").isNotDisplayed()
     }
+
+    @Test
+    fun shouldShowLoginCallError() {
+        onId(R.id.loginInput).typeText("email@test.com")
+        onId(R.id.passwordInput).typeText("email@test.com")
+        onId(R.id.loginButton).click()
+        onText("Login failed").isDisplayed()
+    }
 }
