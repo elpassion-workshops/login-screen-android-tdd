@@ -119,6 +119,12 @@ class LoginActivityTest {
         checkIntent(NextScreen::class.java)
     }
 
+    @Test
+    fun shouldShowLoaderAfterLogin() {
+        login()
+        onId(R.id.loader).isDisplayed()
+    }
+
     private fun login(login: String = "email@test.com", password: String = "secret") {
         onId(R.id.loginInput).typeText(login)
         onId(R.id.passwordInput).typeText(password)
