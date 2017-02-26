@@ -27,6 +27,9 @@ class LoginActivityTest {
         }
     }
 
+    @JvmField @Rule
+    val intentsRule = InitIntentsRule()
+
     @Test
     fun shouldShowLoginHeader() {
         onText("Login").isDisplayed()
@@ -107,6 +110,13 @@ class LoginActivityTest {
     fun shouldNotShowLoginErrorWhenSucceed() {
         login()
         onText("Login failed").isNotDisplayed()
+    }
+
+    @Test
+    fun shouldOpenNextScreenAfterApiSucceed() {
+        login()
+        apiSubject.onSuccess(User(1))
+        checkIntent(NextScreen::class.java)
     }
 
     private fun login(login: String = "email@test.com", password: String = "secret") {
