@@ -45,7 +45,9 @@
         android:visibility="gone" />
 
     <TextView
+        android:id="@+id/apiError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login failed" />
+        android:text="Login failed"
+        android:visibility="gone" />
 </LinearLayout>

@@ -68,7 +68,7 @@ class LoginActivityTest {
     }
 
     @Test
-    fun shouldNotShowErrorOnStart() {
+    fun shouldNotShowPasswordErrorOnStart() {
         onText("Password cannot be empty").isNotDisplayed()
     }
 
@@ -82,6 +82,11 @@ class LoginActivityTest {
     fun shouldShowLoginCallError() {
         login()
         onText("Login failed").isDisplayed()
+    }
+
+    @Test
+    fun shouldNotShowApiErrorOnStart() {
+        onText("Login failed").isNotDisplayed()
     }
 
     private fun login(login: String = "email@test.com", password: String = "secret") {
