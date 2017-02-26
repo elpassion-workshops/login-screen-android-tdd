@@ -38,7 +38,9 @@
         android:visibility="gone" />
 
     <TextView
+        android:id="@+id/passwordEmptyError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Password cannot be empty" />
+        android:text="Password cannot be empty"
+        android:visibility="gone" />
 </LinearLayout>
