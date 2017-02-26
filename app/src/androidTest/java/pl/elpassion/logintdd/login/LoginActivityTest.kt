@@ -38,4 +38,9 @@ class LoginActivityTest {
     fun shouldShowPasswordInSecretWay() {
         onId(R.id.passwordInput).check(matches(withInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT)))
     }
+
+    @Test
+    fun shouldShowLoginButton() {
+        onId(R.id.loginButton).isDisplayed()
+    }
 }
