@@ -32,6 +32,7 @@ buildscript {
     ext.kotlin_version = '1.1.0-rc-91'
     ext.rxJava = '2.0.6'
     ext.dexMakerVersion = '1.4'
+    ext.androidCommons = '0.0.11'
     repositories {
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1/" }
         jcenter()
@@ -48,7 +49,7 @@ dependencies {
     compile "io.reactivex.rxjava2:rxjava:$rxJava"
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
-    compile("com.elpassion.android.commons:view:0.0.11") {
+    compile("com.elpassion.android.commons:view:$androidCommons") {
         exclude group: 'com.android.support'
         exclude group: 'org.jetbrains.kotlin'
     }
@@ -56,7 +57,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestCompile("com.elpassion.android.commons:espresso:0.0.11") {
+    androidTestCompile("com.elpassion.android.commons:espresso:$androidCommons") {
         exclude group: 'com.android.support'
         exclude group: 'org.jetbrains.kotlin'
     }
