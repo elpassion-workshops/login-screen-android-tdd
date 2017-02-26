@@ -13,7 +13,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
         setContentView(R.layout.login_activity)
         loginButton.setOnClickListener {
             LoginController(object : Login.Api {
-                override fun login(login: String, password: String) = Single.never<User>()
+                override fun login(login: String, password: String) = Single.error<User>(RuntimeException())
             }, this, object : Login.UserRepository {
                 override fun saveUser(user: User) = Unit
             }).onLogin(loginInput.text.toString(), passwordInput.text.toString())
@@ -33,12 +33,10 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun showLoginFailed() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        apiError.show()
     }
 
     override fun showLoader() = Unit
 
-    override fun hideLoader() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun hideLoader() = Unit
 }
