@@ -29,7 +29,7 @@ buildscript {
     ext.kotlin = '1.1.0-rc-91'
     ext.rxJava = '2.0.6'
     ext.dexMaker = '1.4'
-    ext.androidCommons = '0.0.11'
+    ext.androidCommons = '0.0.12'
     ext.mockitoKotlin = '1.2.0'
 
     repositories {
