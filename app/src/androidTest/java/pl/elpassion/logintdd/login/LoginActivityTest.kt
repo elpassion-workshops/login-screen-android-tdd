@@ -46,7 +46,7 @@ class LoginActivityTest {
 
     @Test
     fun shouldShowErrorWhenLoginEmpty() {
-        onId(R.id.loginButton).click()
+        login(login = "")
         onText("Login cannot be empty").isDisplayed()
     }
 
@@ -57,15 +57,13 @@ class LoginActivityTest {
 
     @Test
     fun shouldNotShowLoginEmptyErrorWhenLoginIsNotEmpty() {
-        onId(R.id.loginInput).typeText("email@test.com")
-        onId(R.id.loginButton).click()
+        login(login = "email@test.com")
         onText("Login cannot be empty").isNotDisplayed()
     }
 
     @Test
     fun shouldShowErrorWhenPasswordIsEmpty() {
-        onId(R.id.loginInput).typeText("email@test.com")
-        onId(R.id.loginButton).click()
+        login(password = "")
         onText("Password cannot be empty").isDisplayed()
     }
 
@@ -76,17 +74,19 @@ class LoginActivityTest {
 
     @Test
     fun shouldNotShowPasswordEmptyErrorWhenLoginIsNotEmpty() {
-        onId(R.id.loginInput).typeText("email@test.com")
-        onId(R.id.passwordInput).typeText("secret")
-        onId(R.id.loginButton).click()
+        login()
         onText("Password cannot be empty").isNotDisplayed()
     }
 
     @Test
     fun shouldShowLoginCallError() {
-        onId(R.id.loginInput).typeText("email@test.com")
-        onId(R.id.passwordInput).typeText("email@test.com")
-        onId(R.id.loginButton).click()
+        login()
         onText("Login failed").isDisplayed()
+    }
+
+    private fun login(login: String = "email@test.com", password: String = "secret") {
+        onId(R.id.loginInput).typeText(login)
+        onId(R.id.passwordInput).typeText(password)
+        onId(R.id.loginButton).click()
     }
 }
