@@ -26,7 +26,9 @@ class LoginActivity : AppCompatActivity(), Login.View {
         loginEmptyError.show()
     }
 
-    override fun showEmptyPasswordError() = Unit
+    override fun showEmptyPasswordError() {
+        passwordEmptyError.show()
+    }
 
     override fun openNextScreen() {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
