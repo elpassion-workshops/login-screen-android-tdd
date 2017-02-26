@@ -20,4 +20,9 @@ class LoginActivityTest {
     fun shouldShowLoginInput() {
         onId(R.id.loginInput).typeText("email@test.com").hasText("email@test.com")
     }
+
+    @Test
+    fun shouldShowPassword() {
+        onText("Password").isDisplayed()
+    }
 }
