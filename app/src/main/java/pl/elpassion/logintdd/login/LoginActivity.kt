@@ -3,6 +3,7 @@ package pl.elpassion.logintdd.login
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.logintdd.R
@@ -36,5 +37,5 @@ class LoginActivity : AppCompatActivity(), Login.View {
 
     override fun showLoader() = Unit
 
-    override fun hideLoader() = Unit
+    override fun hideLoader() = loader.hide()
 }

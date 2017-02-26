@@ -126,6 +126,13 @@ class LoginActivityTest {
         onId(R.id.loader).isDisplayed()
     }
 
+    @Test
+    fun shouldHideLoaderAfterLoginFailure() {
+        login()
+        apiSubject.onError(RuntimeException())
+        onId(R.id.loader).isNotDisplayed()
+    }
+
     private fun login(login: String = "email@test.com", password: String = "secret") {
         onId(R.id.loginInput).typeText(login)
         onId(R.id.passwordInput).typeText(password)
