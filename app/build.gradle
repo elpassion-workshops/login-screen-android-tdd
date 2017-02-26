@@ -31,6 +31,7 @@ android {
 buildscript {
     ext.kotlin_version = '1.1.0-rc-91'
     ext.rxJava = '2.0.6'
+    ext.dexMakerVersion = '1.4'
     repositories {
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1/" }
         jcenter()
@@ -45,6 +46,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile "io.reactivex.rxjava2:rxjava:$rxJava"
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
     compile("com.elpassion.android.commons:view:0.0.11") {
         exclude group: 'com.android.support'
         exclude group: 'org.jetbrains.kotlin'
@@ -57,6 +60,15 @@ dependencies {
         exclude group: 'com.android.support'
         exclude group: 'org.jetbrains.kotlin'
     }
+    androidTestCompile("com.nhaarman:mockito-kotlin:1.2.0") {
+        exclude group: 'org.mockito'
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
+
+    androidTestCompile "com.crittercism.dexmaker:dexmaker:$dexMakerVersion"
+    androidTestCompile "com.crittercism.dexmaker:dexmaker-dx:$dexMakerVersion"
+    androidTestCompile "com.crittercism.dexmaker:dexmaker-mockito:$dexMakerVersion"
 
     testCompile 'junit:junit:4.12'
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -68,4 +80,5 @@ dependencies {
 repositories {
     maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1/" }
     mavenCentral()
+    jcenter()
 }
