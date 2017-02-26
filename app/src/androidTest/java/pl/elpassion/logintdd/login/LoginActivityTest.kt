@@ -43,4 +43,10 @@ class LoginActivityTest {
     fun shouldShowLoginButton() {
         onId(R.id.loginButton).isDisplayed()
     }
+
+    @Test
+    fun shouldShowErrorWhenLoginEmpty() {
+        onId(R.id.loginButton).click()
+        onText("Login cannot be empty").isDisplayed()
+    }
 }
