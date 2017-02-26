@@ -22,7 +22,12 @@ class LoginActivityTest {
     }
 
     @Test
-    fun shouldShowPassword() {
+    fun shouldShowPasswordHeader() {
         onText("Password").isDisplayed()
+    }
+
+    @Test
+    fun shouldShowPasswordInput() {
+        onId(R.id.passwordInput).typeText("secret").hasText("secret")
     }
 }
