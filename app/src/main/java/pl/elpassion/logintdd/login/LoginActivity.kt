@@ -18,7 +18,8 @@ class LoginActivity : AppCompatActivity(), Login.View {
                 override fun login(login: String, password: String) = Single.never<User>()
             }, this, object : Login.UserRepository {
                 override fun saveUser(user: User) = Unit
-            }, Schedulers.io(), AndroidSchedulers.mainThread()).onLogin(loginInput.text.toString(), "")
+            }, Schedulers.io(), AndroidSchedulers.mainThread())
+                    .onLogin(loginInput.text.toString(), passwordInput.text.toString())
         }
     }
 
@@ -38,9 +39,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun showLoader() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun showLoader() = Unit
 
     override fun hideLoader() {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
