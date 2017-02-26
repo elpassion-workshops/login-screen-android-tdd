@@ -38,7 +38,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
         apiError.show()
     }
 
-    override fun showLoader() = Unit
+    override fun showLoader() = loader.show()
 
     override fun hideLoader() = loader.hide()
 }

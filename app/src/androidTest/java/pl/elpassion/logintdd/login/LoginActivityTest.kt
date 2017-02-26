@@ -132,6 +132,11 @@ class LoginActivityTest {
         onId(R.id.loader).isNotDisplayed()
     }
 
+    @Test
+    fun shouldLoaderBeInvisibleOnStart() {
+        onId(R.id.loader).isNotDisplayed()
+    }
+
     private fun login(login: String = "email@test.com", password: String = "secret") {
         onId(R.id.loginInput).typeText(login)
         onId(R.id.passwordInput).typeText(password)
