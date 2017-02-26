@@ -13,6 +13,7 @@ import io.reactivex.subjects.SingleSubject
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.logintdd.R
+import pl.elpassion.logintdd.loader.LoaderView
 
 class LoginActivityTest {
 
@@ -21,6 +22,7 @@ class LoginActivityTest {
     @JvmField @Rule
     val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java) {
         override fun beforeActivityLaunched() {
+            LoaderView.isTest = true
             Login.Api.override = mock<Login.Api>().apply {
                 whenever(login(any(), any())).thenReturn(apiSubject.observeOn(AndroidSchedulers.mainThread()))
             }
