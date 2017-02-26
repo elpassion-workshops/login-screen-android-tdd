@@ -33,6 +33,7 @@ buildscript {
     ext.rxJava = '2.0.6'
     ext.dexMakerVersion = '1.4'
     ext.androidCommons = '0.0.11'
+    ext.mockitoKotlin = '1.2.0'
     repositories {
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1/" }
         jcenter()
@@ -61,7 +62,7 @@ dependencies {
         exclude group: 'com.android.support'
         exclude group: 'org.jetbrains.kotlin'
     }
-    androidTestCompile("com.nhaarman:mockito-kotlin:1.2.0") {
+    androidTestCompile("com.nhaarman:mockito-kotlin:$mockitoKotlin") {
         exclude group: 'org.mockito'
         exclude group: 'org.jetbrains.kotlin'
     }
@@ -73,7 +74,7 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    testCompile("com.nhaarman:mockito-kotlin:1.2.0") {
+    testCompile("com.nhaarman:mockito-kotlin:$mockitoKotlin") {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'
     }
 }
