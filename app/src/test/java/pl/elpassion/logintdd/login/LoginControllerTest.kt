@@ -14,7 +14,8 @@ class LoginControllerTest {
     private val userRepository = mock<Login.UserRepository>()
     private val apiSubject = SingleSubject.create<User>()
     private val subscribeOnScheduler = TestScheduler()
-    private val loginController = LoginController(api, view, userRepository, subscribeOnScheduler)
+    private val observeOnScheduler = TestScheduler()
+    private val loginController = LoginController(api, view, userRepository, subscribeOnScheduler, observeOnScheduler)
 
     @Before
     fun setUp() {
@@ -75,6 +76,7 @@ class LoginControllerTest {
         whenever(api.login("wrongLogin", "wrongPassword")).thenReturn(Single.error(RuntimeException()))
         login("wrongLogin", "wrongPassword")
         subscribeOnScheduler.triggerActions()
+        observeOnScheduler.triggerActions()
         verify(view).showLoginFailed()
     }
 
@@ -132,6 +134,14 @@ class LoginControllerTest {
         verify(view, never()).hideLoader()
     }
 
+    @Test
+    fun shouldObserveApiOnProvidedScheduler() {
+        login()
+        apiSubject.onSuccess(newUser())
+        subscribeOnScheduler.triggerActions()
+        verify(view, never()).hideLoader()
+    }
+
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
         loginController
                 .onLogin(login = login, password = password)
@@ -140,11 +150,13 @@ class LoginControllerTest {
     private fun emitApiSuccess(user: User = newUser()) {
         apiSubject.onSuccess(user)
         subscribeOnScheduler.triggerActions()
+        observeOnScheduler.triggerActions()
     }
 
     private fun emitApiError() {
         apiSubject.onError(RuntimeException())
         subscribeOnScheduler.triggerActions()
+        observeOnScheduler.triggerActions()
     }
 
     private fun newUser(id: Long = 1) = User(id)
