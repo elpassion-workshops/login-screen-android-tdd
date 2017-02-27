@@ -97,7 +97,7 @@ class LoginControllerTest {
     @Test
     fun shouldHideLoaderWhenApiFails() {
         login()
-        apiSubject.onError(RuntimeException())
+        emitApiError()
         verify(view).hideLoader()
     }
 
@@ -129,6 +129,10 @@ class LoginControllerTest {
 
     private fun emitApiSuccess(user: User = newUser()) {
         apiSubject.onSuccess(user)
+    }
+
+    private fun emitApiError() {
+        apiSubject.onError(RuntimeException())
     }
 
     private fun newUser(id: Long = 1) = User(id)
