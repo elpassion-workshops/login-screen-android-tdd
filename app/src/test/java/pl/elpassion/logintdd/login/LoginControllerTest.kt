@@ -58,7 +58,7 @@ class LoginControllerTest {
     @Test
     fun shouldOpenNextScreenOnLoginSuccess() {
         login()
-        apiSubject.onSuccess(newUser())
+        emitApiSuccess()
         verify(view).openNextScreen()
     }
 
@@ -84,7 +84,7 @@ class LoginControllerTest {
     @Test
     fun shouldHideLoaderWhenCallToApiEnds() {
         login()
-        apiSubject.onSuccess(newUser())
+        emitApiSuccess()
         verify(view).hideLoader()
     }
 
@@ -118,13 +118,17 @@ class LoginControllerTest {
     fun shouldSaveReturnedUserFromApi() {
         val user = newUser(id = 2)
         login()
-        apiSubject.onSuccess(user)
+        emitApiSuccess(user)
         verify(userRepository).saveUser(user)
     }
 
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
         loginController
                 .onLogin(login = login, password = password)
+    }
+
+    private fun emitApiSuccess(user: User = newUser()) {
+        apiSubject.onSuccess(user)
     }
 
     private fun newUser(id: Long = 1) = User(id)
