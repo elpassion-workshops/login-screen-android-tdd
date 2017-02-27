@@ -1,11 +1,13 @@
 package pl.elpassion.logintdd.login
 
+import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 
 class LoginController(
         private val api: Login.Api,
         private val view: Login.View,
-        private val userRepository: Login.UserRepository) {
+        private val userRepository: Login.UserRepository,
+        private val subscribeOnScheduler: Scheduler) {
 
     private var disposable: Disposable? = null
 
@@ -19,6 +21,7 @@ class LoginController(
 
     private fun login(login: String, password: String) {
         disposable = api.login(login, password)
+                .subscribeOn(subscribeOnScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally { view.hideLoader() }
                 .doOnSuccess { userRepository.saveUser(it) }

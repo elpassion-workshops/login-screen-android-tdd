@@ -2,6 +2,7 @@ package pl.elpassion.logintdd.login
 
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Single
+import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
@@ -12,7 +13,8 @@ class LoginControllerTest {
     private val api = mock<Login.Api>()
     private val userRepository = mock<Login.UserRepository>()
     private val apiSubject = SingleSubject.create<User>()
-    private val loginController = LoginController(api, view, userRepository)
+    private val subscribeOnScheduler = TestScheduler()
+    private val loginController = LoginController(api, view, userRepository, subscribeOnScheduler)
 
     @Before
     fun setUp() {
@@ -72,6 +74,7 @@ class LoginControllerTest {
     fun shouldShowErrorWhenApiLoginFails() {
         whenever(api.login("wrongLogin", "wrongPassword")).thenReturn(Single.error(RuntimeException()))
         login("wrongLogin", "wrongPassword")
+        subscribeOnScheduler.triggerActions()
         verify(view).showLoginFailed()
     }
 
@@ -122,6 +125,13 @@ class LoginControllerTest {
         verify(userRepository).saveUser(user)
     }
 
+    @Test
+    fun shouldCallApiOnProvidedScheduler() {
+        login()
+        apiSubject.onSuccess(newUser())
+        verify(view, never()).hideLoader()
+    }
+
     private fun login(login: String = "correctLogin", password: String = "correctPassword") {
         loginController
                 .onLogin(login = login, password = password)
@@ -129,10 +139,12 @@ class LoginControllerTest {
 
     private fun emitApiSuccess(user: User = newUser()) {
         apiSubject.onSuccess(user)
+        subscribeOnScheduler.triggerActions()
     }
 
     private fun emitApiError() {
         apiSubject.onError(RuntimeException())
+        subscribeOnScheduler.triggerActions()
     }
 
     private fun newUser(id: Long = 1) = User(id)
