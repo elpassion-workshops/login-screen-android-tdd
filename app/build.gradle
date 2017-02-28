@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'jacoco-everywhere'
 
 android {
@@ -44,6 +45,11 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile "io.reactivex.rxjava2:rxjava:$rxJava"
+    compile "io.reactivex.rxjava2:rxandroid:2.0.1"
+    compile("com.elpassion.android.commons:view:0.0.11") {
+        exclude group: 'com.android.support'
+        exclude group: 'org.jetbrains.kotlin'
+    }
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
