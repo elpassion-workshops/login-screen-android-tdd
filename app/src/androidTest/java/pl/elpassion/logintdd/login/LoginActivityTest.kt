@@ -12,7 +12,7 @@ import io.reactivex.subjects.SingleSubject
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.logintdd.R
-import pl.elpassion.logintdd.loader.LoaderView
+import pl.elpassion.logintdd.loader.Animation
 
 class LoginActivityTest {
 
@@ -21,7 +21,7 @@ class LoginActivityTest {
     @JvmField @Rule
     val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java) {
         override fun beforeActivityLaunched() {
-            LoaderView.isTest = true
+            Animation.areEnabled = false
             Login.Api.override = mock<Login.Api>().apply {
                 whenever(login(any(), any())).thenReturn(apiSubject)
             }
