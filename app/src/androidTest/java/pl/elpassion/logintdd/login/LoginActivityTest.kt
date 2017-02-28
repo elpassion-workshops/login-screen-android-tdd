@@ -25,7 +25,6 @@ class LoginActivityTest {
             Login.Api.override = mock<Login.Api>().apply {
                 whenever(login(any(), any())).thenReturn(apiSubject)
             }
-            super.beforeActivityLaunched()
         }
     }
 
@@ -91,7 +90,7 @@ class LoginActivityTest {
     }
 
     @Test
-    fun shouldNotShowPasswordEmptyErrorWhenLoginIsNotEmpty() {
+    fun shouldNotShowPasswordEmptyErrorWhenPasswordIsNotEmpty() {
         login()
         onText("Password cannot be empty").isNotDisplayed()
     }
