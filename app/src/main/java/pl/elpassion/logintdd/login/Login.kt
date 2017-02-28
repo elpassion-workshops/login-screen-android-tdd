@@ -5,6 +5,13 @@ import io.reactivex.Single
 interface Login {
     interface Api {
         fun login(login: String, password: String): Single<User>
+
+        companion object {
+            var override: Api? = null
+            fun get(): Api {
+                return override ?: TODO("Real api does not exists")
+            }
+        }
     }
 
     interface View {

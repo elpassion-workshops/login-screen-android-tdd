@@ -5,14 +5,27 @@ import android.support.test.espresso.matcher.ViewMatchers.withInputType
 import android.support.test.rule.ActivityTestRule
 import android.text.InputType
 import com.elpassion.android.commons.espresso.*
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.subjects.SingleSubject
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.logintdd.R
 
 class LoginActivityTest {
 
+    private val apiSubject = SingleSubject.create<User>()
+
     @JvmField @Rule
-    val rule = ActivityTestRule<LoginActivity>(LoginActivity::class.java)
+    val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java) {
+        override fun beforeActivityLaunched() {
+            Login.Api.override = mock<Login.Api>().apply {
+                whenever(login(any(), any())).thenReturn(apiSubject)
+            }
+            super.beforeActivityLaunched()
+        }
+    }
 
     @Test
     fun shouldShowLoginHeader() {
@@ -81,11 +94,18 @@ class LoginActivityTest {
     @Test
     fun shouldShowLoginCallError() {
         login()
+        apiSubject.onError(RuntimeException())
         onText("Login failed").isDisplayed()
     }
 
     @Test
     fun shouldNotShowApiErrorOnStart() {
+        onText("Login failed").isNotDisplayed()
+    }
+
+    @Test
+    fun shouldNotShowLoginErrorWhenSucceed() {
+        login()
         onText("Login failed").isNotDisplayed()
     }
 
