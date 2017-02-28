@@ -9,6 +9,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.SingleSubject
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.logintdd.R
@@ -22,14 +23,18 @@ class LoginActivityTest {
     val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java) {
         override fun beforeActivityLaunched() {
             Animation.areEnabled = false
-            Login.Api.override = mock<Login.Api>().apply {
-                whenever(login(any(), any())).thenReturn(apiSubject)
-            }
         }
     }
 
     @JvmField @Rule
     val intentsRule = InitIntentsRule()
+
+    @Before
+    fun setUp() {
+        Login.Api.override = mock<Login.Api>().apply {
+            whenever(login(any(), any())).thenReturn(apiSubject)
+        }
+    }
 
     @Test
     fun shouldShowLoginHeader() {
