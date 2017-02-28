@@ -1,5 +1,7 @@
 package pl.elpassion.logintdd.login
 
+import android.content.Intent
+import android.support.test.espresso.Espresso
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.withInputType
 import android.support.test.rule.ActivityTestRule
@@ -9,6 +11,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.SingleSubject
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -18,6 +21,7 @@ import pl.elpassion.logintdd.loader.Animation
 class LoginActivityTest {
 
     private val apiSubject = SingleSubject.create<User>()
+    private var wasDisposed = false
 
     @JvmField @Rule
     val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java) {
@@ -32,7 +36,9 @@ class LoginActivityTest {
     @Before
     fun setUp() {
         Login.Api.override = mock<Login.Api>().apply {
-            whenever(login(any(), any())).thenReturn(apiSubject)
+            whenever(login(any(), any())).thenReturn(apiSubject.doOnDispose{
+                wasDisposed = true
+            })
         }
     }
 
@@ -141,6 +147,15 @@ class LoginActivityTest {
     @Test
     fun shouldLoaderBeInvisibleOnStart() {
         onId(R.id.loader).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldReleaseReferenceToViewOnDestroy() {
+        rule.activity.startActivity(Intent(rule.activity, LoginActivity::class.java))
+        login()
+        Espresso.closeSoftKeyboard()
+        Espresso.pressBack()
+        Assert.assertTrue(wasDisposed)
     }
 
     private fun login(login: String = "email@test.com", password: String = "secret") {

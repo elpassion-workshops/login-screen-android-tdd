@@ -11,14 +11,18 @@ import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.logintdd.R
 
 class LoginActivity : AppCompatActivity(), Login.View {
+
+    val controller by lazy {
+        LoginController(Login.Api.get(), this, object : Login.UserRepository {
+            override fun saveUser(user: User) = Unit
+        }, Schedulers.io(), AndroidSchedulers.mainThread())
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
         loginButton.setOnClickListener {
-            LoginController(Login.Api.get(), this, object : Login.UserRepository {
-                override fun saveUser(user: User) = Unit
-            }, Schedulers.io(), AndroidSchedulers.mainThread())
-                    .onLogin(loginInput.text.toString(), passwordInput.text.toString())
+            controller.onLogin(loginInput.text.toString(), passwordInput.text.toString())
         }
     }
 
@@ -41,4 +45,9 @@ class LoginActivity : AppCompatActivity(), Login.View {
     override fun showLoader() = loader.show()
 
     override fun hideLoader() = loader.hide()
+
+    override fun onDestroy() {
+        controller.onDestroy()
+        super.onDestroy()
+    }
 }
