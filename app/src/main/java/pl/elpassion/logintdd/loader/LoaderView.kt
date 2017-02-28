@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import android.widget.TextView
 
 class LoaderView : FrameLayout {
     constructor(context: Context) : super(context)
@@ -17,6 +18,10 @@ class LoaderView : FrameLayout {
     init {
         if (Animation.areEnabled) {
             addView(ProgressBar(context))
+        } else {
+            addView(TextView(context).apply {
+                text = "Loader"
+            })
         }
     }
 }
