@@ -7,9 +7,6 @@ import io.reactivex.Single
 import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Matchers
-import org.mockito.Matchers.*
-import org.mockito.Mockito.any
 import org.mockito.Mockito.verify
 import java.util.*
 
@@ -139,12 +136,9 @@ class LoginController(private val view: Login.View, private val api: Login.Api, 
 			password.isEmpty() -> view.showPasswordEmptyError()
 			else -> {
 				view.showLoader()
-				api.login().subscribe({
-					view.hideLoader()
-					database.saveAccessToken(it)
-				}, {
-					view.hideLoader()
-				})
+				api.login()
+						.doFinally { view.hideLoader() }
+						.subscribe({ database.saveAccessToken(it) }, { })
 			}
 		}
 	}
