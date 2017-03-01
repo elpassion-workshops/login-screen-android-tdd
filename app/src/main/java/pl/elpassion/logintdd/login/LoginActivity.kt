@@ -15,6 +15,9 @@ class LoginActivity : AppCompatActivity(){
     }
 
     private fun setOnClickListener() {
-        loginButton.setOnClickListener { loginError.show() }
+        loginButton.setOnClickListener {
+            loginEmptyError.show()
+            passwordEmptyError.show()
+        }
     }
 }
