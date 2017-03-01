@@ -129,9 +129,9 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
     }
 
     private fun performApiLogin(login: String, password: String) {
-        view.showLoader()
         api
                 .login(login, password)
+                .doOnSubscribe { view.showLoader() }
                 .doOnSuccess { view.openNextScreen() }
                 .doOnError { view.showLoginError() }
                 .subscribe()
