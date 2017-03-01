@@ -18,7 +18,7 @@ class LoginActivityTest {
 
     @Test
     fun shouldHaveLoginInputHeader() {
-        onText(R.string.login).isDisplayed()
+        onText(R.string.email).isDisplayed()
     }
 
     @Test
@@ -39,5 +39,10 @@ class LoginActivityTest {
     @Test
     fun shouldHaveSecurePassword() {
         onId(R.id.passwordInput).check(matches(withInputType(TYPE_TEXT_VARIATION_PASSWORD or TYPE_CLASS_TEXT)))
+    }
+
+    @Test
+    fun shouldHaveLoginButton() {
+        onId(R.id.button_login).hasText(R.string.login)
     }
 }
