@@ -11,7 +11,6 @@ class LoginActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.login_activity)
-		loginInput.error = getString(R.string.emptyLogin)
-		login_button.setOnClickListener { emptyLoginErrorTextView.visibility = View.VISIBLE }
+		loginButton.setOnClickListener { emptyLoginErrorTextView.visibility = View.VISIBLE }
 	}
 }
