@@ -46,6 +46,18 @@ class LoginControllerTest {
 		verify(api, never()).login()
 	}
 
+	@Test
+	fun shouldNotCallApiWhenLoginIsEmpty() {
+		login(login = "")
+		verify(api, never()).login()
+	}
+
+	@Test
+	fun shouldNotCallApiWhenLoginAndPasswordIsEmpty() {
+		login(login = "", password = "")
+		verify(api, never()).login()
+	}
+
 	private fun login(login: String = "login", password: String = "password") {
 		LoginController(view, api).login(login = login, password = password)
 	}
