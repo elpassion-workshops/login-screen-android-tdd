@@ -8,6 +8,8 @@ import pl.elpassion.logintdd.R
 
 class LoginActivityTest {
 
+    private val login = "login"
+
     @JvmField @Rule
     val rule = ActivityTestRule<LoginActivity>(LoginActivity::class.java)
 
@@ -18,7 +20,7 @@ class LoginActivityTest {
 
     @Test
     fun shouldHaveLoginInput() {
-        onId(R.id.loginInput).typeText("login").hasText("login")
+        onId(R.id.loginInput).typeText(login).hasText(login)
     }
 
     @Test
