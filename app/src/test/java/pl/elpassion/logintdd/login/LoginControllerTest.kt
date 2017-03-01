@@ -102,6 +102,13 @@ class LoginControllerTest {
 		verify(view, never()).hideLoader()
 	}
 
+	@Test
+	fun shouldHideLoaderOnApiCallError() {
+		login()
+		apiSubject.onError(Throwable())
+		verify(view).hideLoader()
+	}
+
 	private fun login(login: String = "login", password: String = "password") {
 		LoginController(view, api, database).login(login = login, password = password)
 	}
@@ -135,7 +142,9 @@ class LoginController(private val view: Login.View, private val api: Login.Api, 
 				api.login().subscribe({
 					view.hideLoader()
 					database.saveAccessToken(it)
-				}, {})
+				}, {
+					view.hideLoader()
+				})
 			}
 		}
 	}
