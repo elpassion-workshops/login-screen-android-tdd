@@ -62,4 +62,9 @@ class LoginActivityTest {
         onId(R.id.loginButton).click()
         onId(R.id.emptyPasswordError).isDisplayed()
     }
+
+    @Test
+    fun shouldHaveHiddenEmptyPasswordMessage() {
+        onId(R.id.emptyPasswordError).isNotDisplayed()
+    }
 }

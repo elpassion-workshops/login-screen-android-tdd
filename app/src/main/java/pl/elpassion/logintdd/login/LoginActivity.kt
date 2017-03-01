@@ -36,6 +36,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun showEmptyPasswordError() {
+        emptyPasswordError.show()
     }
 
     override fun openNextScreen() {
