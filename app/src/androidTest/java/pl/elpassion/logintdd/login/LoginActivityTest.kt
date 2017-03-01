@@ -66,4 +66,9 @@ class LoginActivityTest {
         onId(R.id.loginButton).click()
         onId(R.id.passwordError).hasText("Password error").isDisplayed()
     }
+
+    @Test
+    fun shouldNotShowPasswordErrorOnStart() {
+        onId(R.id.passwordError).isNotDisplayed()
+    }
 }

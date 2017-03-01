@@ -12,6 +12,9 @@ class LoginActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
 
-        loginButton.setOnClickListener { loginError.visibility = VISIBLE }
+        loginButton.setOnClickListener {
+            loginError.visibility = VISIBLE
+            passwordError.visibility = VISIBLE
+        }
     }
 }
