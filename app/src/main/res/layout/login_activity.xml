@@ -26,13 +26,13 @@
         android:inputType="textPassword"/>
 
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"/>
 
     <TextView
-        android:id="@+id/login_empty_error"
+        android:id="@+id/loginEmptyError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"/>

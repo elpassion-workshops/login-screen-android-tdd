@@ -43,25 +43,25 @@ class LoginActivityTest {
 
     @Test
     fun shouldHaveLoginButton() {
-        onId(R.id.button_login).hasText(R.string.login)
+        onId(R.id.`@+id/loginButton`).hasText(R.string.login)
     }
 
     @Test
     fun shouldShowErrorWhenLoginIsEmpty() {
         onId(R.id.loginInput).typeText("")
-        onId(R.id.button_login).click()
-        onId(R.id.login_empty_error).isDisplayed()
+        onId(R.id.`@+id/loginButton`).click()
+        onId(R.id.`@+id/loginEmptyError`).isDisplayed()
     }
 
     @Test
     fun shouldNotShowErrorOnIdleState() {
-        onId(R.id.login_empty_error).isNotDisplayed()
+        onId(R.id.`@+id/loginEmptyError`).isNotDisplayed()
     }
 
     @Test
     fun shouldNotShowErrorWhenLoginNotEmpty() {
         onId(R.id.loginInput).typeText("login")
-        onId(R.id.button_login).click()
-        onId(R.id.login_empty_error).isNotDisplayed()
+        onId(R.id.`@+id/loginButton`).click()
+        onId(R.id.`@+id/loginEmptyError`).isNotDisplayed()
     }
 }

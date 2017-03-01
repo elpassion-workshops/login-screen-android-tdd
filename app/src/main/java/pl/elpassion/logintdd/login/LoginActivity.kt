@@ -12,11 +12,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
-        button_login.setOnClickListener {
+        loginButton.setOnClickListener {
             if ((loginInput as EditText).text.isNotEmpty()) {
-                login_empty_error.visibility = View.GONE
+                loginEmptyError.visibility = View.GONE
             } else {
-                login_empty_error.visibility = View.VISIBLE
+                loginEmptyError.visibility = View.VISIBLE
             }
         }
     }
