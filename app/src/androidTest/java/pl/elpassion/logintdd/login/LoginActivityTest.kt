@@ -47,4 +47,9 @@ class LoginActivityTest {
     fun shouldHaveLoginButton() {
         onText(R.string.login_button_text).isDisplayed()
     }
+
+    @Test
+    fun shouldNotHaveVisibleLoaderInitially() {
+        onId(R.id.progress_bar).isNotDisplayed()
+    }
 }
