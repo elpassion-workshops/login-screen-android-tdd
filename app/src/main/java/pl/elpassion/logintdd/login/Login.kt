@@ -19,4 +19,14 @@ interface Login {
     interface UserRepository {
         fun saveUser(user: User)
     }
+
+    object ApiProvider {
+        var override: Login.Api? = null
+        fun get() = override ?: TODO("Not implemented")
+    }
+
+    object UserRepositoryProvider {
+        var override: Login.UserRepository? = null
+        fun get() = override ?: TODO("Not implemented")
+    }
 }

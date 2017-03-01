@@ -2,6 +2,10 @@ package pl.elpassion.logintdd.login
 
 import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.*
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.subjects.SingleSubject
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.logintdd.R
@@ -9,10 +13,15 @@ import pl.elpassion.logintdd.common.Animations
 
 class LoginActivityTest {
 
+    private val loginSubject = SingleSubject.create<User>()
     @JvmField @Rule
-    val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java){
+    val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java) {
         override fun beforeActivityLaunched() {
             Animations.areEnabled = false
+            Login.ApiProvider.override = mock<Login.Api>().apply {
+                whenever(login(any(), any())).thenReturn(loginSubject)
+            }
+            Login.UserRepositoryProvider.override = mock()
         }
     }
 
@@ -51,4 +60,12 @@ class LoginActivityTest {
     fun shouldNotShowProgressBarWhenNotClicked() {
         onId(R.id.loader).isNotDisplayed()
     }
+
+    @Test
+    fun shouldHideProgressBarWhenApiError() {
+        onId(R.id.loginButton).click()
+        loginSubject.onError(Throwable())
+        onId(R.id.loader).isNotDisplayed()
+    }
+
 }
