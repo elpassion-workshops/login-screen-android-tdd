@@ -12,11 +12,6 @@ class LoginActivityTest {
     val rule = ActivityTestRule<LoginActivity>(LoginActivity::class.java)
 
     @Test
-    fun shouldStartLoginActivity() {
-
-    }
-
-    @Test
     fun shouldHaveLoginInputHeader() {
         onText("Login").isDisplayed()
     }
