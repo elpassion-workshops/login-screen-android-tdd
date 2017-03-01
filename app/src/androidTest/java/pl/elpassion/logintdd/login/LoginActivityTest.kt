@@ -5,11 +5,16 @@ import com.elpassion.android.commons.espresso.*
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.logintdd.R
+import pl.elpassion.logintdd.common.Animations
 
 class LoginActivityTest {
 
     @JvmField @Rule
-    val rule = ActivityTestRule<LoginActivity>(LoginActivity::class.java)
+    val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java){
+        override fun beforeActivityLaunched() {
+            Animations.areEnabled = false
+        }
+    }
 
     @Test
     fun shouldHaveLoginInputHeader() {
@@ -36,4 +41,8 @@ class LoginActivityTest {
         onId(R.id.loginButton).isDisplayed().hasText("Login")
     }
 
+    @Test
+    fun shouldShowLoaderOnLoginClicked() {
+        onId(R.id.loader).isDisplayed()
+    }
 }
