@@ -45,4 +45,13 @@ class LoginActivityTest {
     fun shouldHaveLoginButton() {
         onId(R.id.button_login).hasText(R.string.login)
     }
+
+    @Test
+    fun shouldShowErrorWhenLoginIsEmpty() {
+        onId(R.id.loginInput).typeText("")
+        onId(R.id.button_login).click()
+        onId(R.id.login_empty_error).isDisplayed()
+    }
+
+
 }
