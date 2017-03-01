@@ -2,6 +2,9 @@ package pl.elpassion.logintdd.login
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Observable
+import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.verify
 
@@ -9,6 +12,11 @@ class LoginControllerTest {
 
     private val view = mock<Login.View>()
     private val apiManager = mock<Login.Api>()
+
+    @Before
+    fun setUp() {
+        whenever(apiManager.login()).thenReturn(Observable.just(Unit))
+    }
 
     @Test
     fun shouldShowErrorWhenLoginIsEmpty() {
@@ -70,6 +78,13 @@ class LoginControllerTest {
         verify(view).hideProgress()
     }
 
+    @Test
+    fun shouldNotHideProgressWhenApiCallNotEnded() {
+        whenever(apiManager.login()).thenReturn(Observable.never())
+        login()
+        verify(view, never()).hideProgress()
+    }
+
     private fun login(login: String = "login", password: String = "MargaretTatcherIs100%Sexy") {
         LoginController(view, apiManager).login(login = login, password = password)
     }
@@ -84,7 +99,7 @@ interface Login {
     }
 
     interface Api {
-        fun login()
+        fun login(): Observable<Unit>
     }
 }
 
@@ -95,10 +110,11 @@ class LoginController(private val view: Login.View,
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
             else -> {
-                apiManager.login()
+                apiManager.login().subscribe({
+                    view.hideProgress()
+                })
                 view.showProgress()
             }
         }
-        view.hideProgress()
     }
 }
