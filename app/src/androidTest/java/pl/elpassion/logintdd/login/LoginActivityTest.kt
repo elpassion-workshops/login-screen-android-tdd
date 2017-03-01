@@ -24,6 +24,11 @@ class LoginActivityTest {
     }
 
     @Test
+    fun shouldHavePasswordInput() {
+        onId(R.id.passwordInput).typeText(login).hasText(login)
+    }
+
+    @Test
     fun shouldHavePasswordInputHeader() {
         onText(R.string.password_label).isDisplayed()
     }
