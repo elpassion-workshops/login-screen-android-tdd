@@ -11,6 +11,7 @@ import org.mockito.Mockito.verify
 class LoginControllerTest {
     private val view = mock<Login.View>()
     private val validator = mock<Login.Validator>()
+    private val apiTokenStore = mock<Login.ApiTokenStore>()
 
     @Before
     fun setUp() {
@@ -95,7 +96,6 @@ class LoginControllerTest {
     fun `should hide progress bar when validation passes`() {
         login()
         verify(view).hideProgressBar()
-
     }
 
     @Test
@@ -105,12 +105,18 @@ class LoginControllerTest {
         verify(view, never()).hideProgressBar()
     }
 
+    @Test
+    fun `should save authentication token when validation passes`() {
+        login()
+        verify(apiTokenStore).saveToken()
+    }
+
     private fun mockValidator(returnValue: Observable<Unit> = Observable.just(Unit)) {
         whenever(validator.validate()).thenReturn(returnValue)
     }
 
     private fun login(login: String = "myLogin", password: String = "myPassword") {
-        LoginController(view, validator).login(login = login, password = password)
+        LoginController(view, validator, apiTokenStore).login(login = login, password = password)
     }
 }
 
@@ -126,9 +132,13 @@ interface Login {
     interface Validator {
         fun validate(): Observable<Unit>
     }
+
+    interface ApiTokenStore {
+        fun saveToken()
+    }
 }
 
-class LoginController(private val view: Login.View, private val validator: Login.Validator) {
+class LoginController(private val view: Login.View, private val validator: Login.Validator, private val apiTokenStore: Login.ApiTokenStore) {
     fun login(login: String, password: String) {
         when {
             login.isEmpty() -> view.showLoginEmptyError()
@@ -137,10 +147,12 @@ class LoginController(private val view: Login.View, private val validator: Login
                 view.showProgressBar()
                 validator
                         .validate()
-                        .doOnComplete { view.hideProgressBar() }
                         .doOnError { view.showCredentialsError() }
+                        .doOnComplete { view.hideProgressBar() }
                         .subscribe({}, {})
             }
         }
+
+        apiTokenStore.saveToken()
     }
 }
