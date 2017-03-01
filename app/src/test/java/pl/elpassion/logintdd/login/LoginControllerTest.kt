@@ -96,16 +96,14 @@ interface Login {
 
 class LoginController(private val view: Login.View, private val api: Login.Api) {
     fun login(login: String, password: String) {
-        if (login.isEmpty()) {
-            view.showLoginEmptyError()
-        }
-        if (password.isEmpty()) {
-            view.showPasswordEmptyError()
-        }
-        if (login.isNotEmpty() && password.isNotEmpty()) {
-            view.showLoader()
-            api.performCall()
-            view.hideLoader()
+        when {
+            login.isEmpty() -> view.showLoginEmptyError()
+            password.isEmpty() -> view.showPasswordEmptyError()
+            else -> {
+                view.showLoader()
+                api.performCall()
+                view.hideLoader()
+            }
         }
     }
 }
