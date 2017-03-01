@@ -53,7 +53,7 @@ class LoginActivityTest {
     }
 
     @Test
-    fun shouldNotShowLoginEmptyErrorWhenButtonIsNotClicked() {
+    fun shouldNotShowLoginEmptyErrorOnStart() {
         onId(R.id.loginEmptyError).isNotDisplayed()
     }
 
