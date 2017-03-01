@@ -40,6 +40,12 @@ class LoginControllerTest {
         verify(apiManager).login()
     }
 
+    @Test
+    fun shouldNotCallApiWhenLoginIsEmpty() {
+        login(login = "", password = "somePassword")
+        verify(apiManager, never()).login()
+    }
+
     private fun login(login: String = "login", password: String = "password") {
         LoginController(view, apiManager).login(login = login, password = password)
     }
@@ -62,7 +68,7 @@ class LoginController(private val view: Login.View,
         when {
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
+            login.isNotEmpty() -> apiManager.login()
         }
-        apiManager.login()
     }
 }
