@@ -78,7 +78,7 @@ class LoginControllerTest {
 
 		apiSubject.onSuccess(Unit)
 
-		verify(database).saveAccessToken(anyString())
+		verify(database).saveAccessToken("accessToken")
 	}
 
 	@Test
@@ -132,7 +132,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api, 
 				view.showLoader()
 				api.login().subscribe({
 					view.hideLoader()
-					database.saveAccessToken("")
+					database.saveAccessToken("accessToken")
 				}, {})
 			}
 		}
