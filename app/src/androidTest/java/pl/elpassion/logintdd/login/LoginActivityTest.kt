@@ -56,6 +56,12 @@ class LoginActivityTest {
     fun shouldNotShowLoginEmptyErrorWhenButtonIsNotClicked() {
         onId(R.id.loginError).isNotDisplayed()
     }
+
+    @Test
+    fun shouldShowPasswordEmptyErrorWhenPassworIsEmptyOnButtonClick() {
+        onId(R.id.loginButton).click()
+        onId(R.id.passwordError).isDisplayed().hasText("Password cannot be empty")
+    }
 }
 
 private fun ViewInteraction.isSecure() {
