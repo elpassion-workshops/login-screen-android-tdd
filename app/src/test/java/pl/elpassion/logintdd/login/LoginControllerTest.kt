@@ -4,7 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
-import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.verify
 
@@ -12,72 +12,67 @@ class LoginControllerTest {
     private val view = mock<Login.View>()
     private val validator = mock<Login.Validator>()
 
+    @Before
+    fun setUp() {
+        mockValidator()
+    }
+
     @Test
     fun `should show login error when login is empty`() {
-        mockValidator()
         login(login = "")
         verify(view).showLoginEmptyError()
     }
 
     @Test
     fun `should not show login error when login is not empty`() {
-        mockValidator()
         login(login = "myLogin")
         verify(view, never()).showLoginEmptyError()
     }
 
     @Test
     fun `should show password error when password is empty`() {
-        mockValidator()
         login(password = "")
         verify(view).showPasswordEmptyError()
     }
 
     @Test
     fun `should not show password error when password is not empty`() {
-        mockValidator()
         login(password = "myPassword")
         verify(view, never()).showPasswordEmptyError()
     }
 
     @Test
     fun `should show progress bar when login initiated`() {
-        mockValidator()
         login()
         verify(view).showProgressBar()
     }
 
     @Test
     fun `should not show progress bar when login is empty`() {
-        mockValidator()
         login(login = "")
         verify(view, never()).showProgressBar()
     }
 
     @Test
     fun `should not show progress bar when password is empty`() {
-        mockValidator()
         login(password = "")
         verify(view, never()).showProgressBar()
     }
 
     @Test
     fun `should validate login credentials when not empty`() {
-        mockValidator()
         login()
         verify(validator).validate()
     }
 
     @Test
     fun `should not validate credentials when login is empty`() {
-        mockValidator()
         login(login = "")
         verify(validator, never()).validate()
     }
 
     @Test
     fun `should not validate credentials when password is empty`() {
-        mockValidator()
         login(password = "")
         verify(validator, never()).validate()
     }
@@ -96,7 +91,7 @@ class LoginControllerTest {
         verify(view, never()).showCredentialsError()
     }
 
-    private fun mockValidator(returnValue : Observable<Unit> = Observable.just(Unit)) {
+    private fun mockValidator(returnValue: Observable<Unit> = Observable.just(Unit)) {
         whenever(validator.validate()).thenReturn(returnValue)
     }
 
@@ -114,7 +109,7 @@ interface Login {
     }
 
     interface Validator {
-        fun validate() : Observable<Unit>
+        fun validate(): Observable<Unit>
     }
 }
 
@@ -132,7 +127,8 @@ class LoginController(private val view: Login.View, private val validator: Login
                                     correct ->
                                 },
                                 {
-                                    error -> view.showCredentialsError()
+                                    error ->
+                                    view.showCredentialsError()
                                 })
             }
         }
