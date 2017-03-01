@@ -93,7 +93,7 @@ class LoginActivityTest {
 
     @Test
     fun shouldShowLoginErrorWhenApiCallFails() {
-        logIn(login = "invalidLogin", password = "invalidPassword")
+        logIn()
         loginSubject.onError(RuntimeException())
         onId(R.id.loginError).isDisplayed()
     }
