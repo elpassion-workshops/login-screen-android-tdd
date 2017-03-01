@@ -36,12 +36,6 @@ class LoginControllerTest {
     }
 
     @Test
-    fun `should call login API on login`() {
-        login()
-        verify(api).login(any(), any())
-    }
-
-    @Test
     fun `should not call login API when login is empty`() {
         login(login = "")
         verify(api, never()).login(any(), any())
