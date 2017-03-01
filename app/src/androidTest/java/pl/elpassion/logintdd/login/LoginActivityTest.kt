@@ -67,4 +67,10 @@ class LoginActivityTest {
     fun shouldHaveHiddenEmptyPasswordMessage() {
         onId(R.id.emptyPasswordError).isNotDisplayed()
     }
+
+    @Test
+    fun shouldShowProgressBar() {
+        onId(R.id.loginButton).click()
+        onId(R.id.progressBar).isDisplayed()
+    }
 }
