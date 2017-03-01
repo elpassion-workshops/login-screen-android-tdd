@@ -39,4 +39,9 @@ class LoginActivityTest {
     fun shouldPasswordBeSecure() {
         onId(R.id.passwordInput).check(matches(withInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD)))
     }
+
+    @Test
+    fun shouldHaveLoginButton() {
+        onId(R.id.loginButton).isDisplayed()
+    }
 }
