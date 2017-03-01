@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.verify
@@ -12,10 +13,11 @@ class LoginControllerTest {
 
     private val view = mock<Login.View>()
     private val apiManager = mock<Login.Api>()
+    private val publishSubject = PublishSubject.create<Unit>()
 
     @Before
     fun setUp() {
-        whenever(apiManager.login()).thenReturn(Observable.just(Unit))
+        whenever(apiManager.login()).thenReturn(publishSubject)
     }
 
     @Test
@@ -75,12 +77,12 @@ class LoginControllerTest {
     @Test
     fun shouldHideProgressWhenApiCallEnded() {
         login()
+        publishSubject.onNext(Unit)
         verify(view).hideProgress()
     }
 
     @Test
     fun shouldNotHideProgressWhenApiCallNotEnded() {
-        whenever(apiManager.login()).thenReturn(Observable.never())
         login()
         verify(view, never()).hideProgress()
     }
