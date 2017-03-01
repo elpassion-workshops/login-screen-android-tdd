@@ -153,7 +153,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api, 
                 .login(login, password)
                 .doOnSubscribe { view.showLoader() }
                 .doOnSuccess { token ->
-                    authStorage.saveCredentials(token)
+                    authStorage.saveCredentials("token")
                     view.openNextScreen()
                 }
                 .doOnError {
