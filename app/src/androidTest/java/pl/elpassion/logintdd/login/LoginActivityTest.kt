@@ -50,4 +50,10 @@ class LoginActivityTest {
     fun shouldLoginButtonHaveLoginText() {
         onId(R.id.loginButton).check(matches(withText("Login")))
     }
+
+    @Test
+    fun shouldShowLoginErrorWhenClickLoginButton() {
+        onId(R.id.loginButton).click()
+        onId(R.id.loginError).check(matches(withText("Login error")))
+    }
 }
