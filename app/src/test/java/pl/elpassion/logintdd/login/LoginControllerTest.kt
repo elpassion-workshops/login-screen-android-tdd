@@ -3,7 +3,6 @@ package pl.elpassion.logintdd.login
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import org.junit.Test
-import org.mockito.Matchers
 import org.mockito.Mockito.verify
 
 class LoginControllerTest {
@@ -63,7 +62,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
 		when {
 			login.isEmpty() -> view.showLoginEmptyError()
 			password.isEmpty() -> view.showPasswordEmptyError()
-			else -> api.login()
 		}
+		api.login()
 	}
 }
