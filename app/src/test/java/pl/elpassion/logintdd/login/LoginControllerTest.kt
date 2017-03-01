@@ -51,6 +51,13 @@ class LoginControllerTest {
         login(password = "")
         verify(api, never()).login()
     }
+    
+    @Test
+    fun `should show login and password errors when they are empty`() {
+        login(login = "", password = "")
+        verify(view).showPasswordEmptyError()
+        verify(view).showLoginEmptyError()
+    }
 
     private fun login(login: String = "login", password: String = "password") {
         LoginController(view, api).login(login = login, password = password)
@@ -70,7 +77,11 @@ interface Login {
 
 class LoginController(private val view: Login.View, private val api: Login.Api) {
     fun login(login: String, password: String) {
-        if (login.isEmpty()) view.showLoginEmptyError()
+        if (login.isEmpty() and password.isEmpty()) {
+            view.showLoginEmptyError()
+            view.showPasswordEmptyError()
+        }
+        else if (login.isEmpty()) view.showLoginEmptyError()
         else if (password.isEmpty()) view.showPasswordEmptyError()
         else api.login()
     }
