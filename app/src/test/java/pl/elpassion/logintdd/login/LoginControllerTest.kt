@@ -106,7 +106,13 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
             }
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
-            else -> api.login(login, password).subscribe { result -> view.openNextScreen()}
+            else -> performApiLogin(login, password)
         }
+    }
+
+    private fun performApiLogin(login: String, password: String) {
+        api
+                .login(login, password)
+                .subscribe { result -> view.openNextScreen() }
     }
 }
