@@ -93,10 +93,19 @@ class LoginControllerTest {
         verify(view, never()).hideLoader()
     }
 
+    @Test
+    fun shouldShowUnknownErrorUponApiError() {
+        singleSubject.onError(UnknownApiError())
+        login()
+        verify(view).showUnknownError()
+    }
+
     private fun login(login: String = "myLogin", password: String = "password") {
         LoginController(view, api).login(login = login, password = password)
     }
 }
+
+class UnknownApiError : Throwable()
 
 interface Login {
     interface View {
@@ -104,6 +113,7 @@ interface Login {
         fun showPasswordEmptyError()
         fun showLoader()
         fun hideLoader()
+        fun showUnknownError()
     }
 
     interface Api {
@@ -119,9 +129,11 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
             else -> {
                 view.showLoader()
                 api.performCall()
-                        .subscribe { unit ->
+                        .subscribe({
                             view.hideLoader()
-                        }
+                        }, {
+                            view.showUnknownError()
+                        })
             }
         }
     }
