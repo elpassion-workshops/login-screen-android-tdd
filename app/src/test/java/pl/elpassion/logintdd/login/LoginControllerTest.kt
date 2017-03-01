@@ -1,5 +1,6 @@
 package pl.elpassion.logintdd.login
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import org.junit.Test
@@ -36,20 +37,20 @@ class LoginControllerTest {
 
     @Test
     fun shouldCallApiWhenCredentialsAreCorrect() {
-        login()
-        verify(api).loginUser()
+        login("login1", "password1")
+        verify(api).loginUser("login1", "password1")
     }
 
     @Test
     fun shouldNotCallApiWhenLoginIsEmpty() {
         login(login = "")
-        verify(api, never()).loginUser()
+        verify(api, never()).loginUser(any(), any())
     }
 
     @Test
     fun shouldNotCallApiWhenPasswordIsEmpty() {
         login(password = "")
-        verify(api, never()).loginUser()
+        verify(api, never()).loginUser(any(), any())
     }
 
 
@@ -65,7 +66,7 @@ interface Login {
     }
 
     interface Api {
-        fun loginUser()
+        fun loginUser(login: String, password: String)
     }
 }
 
@@ -74,7 +75,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
         when {
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
-            else -> api.loginUser()
+            else -> api.loginUser("login1", "password1")
         }
     }
 }
