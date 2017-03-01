@@ -95,7 +95,14 @@ class LoginControllerTest {
         login()
         verify(view).showLoader()
     }
-    
+
+    @Test
+    fun `should hide loader on unsuccessful login`() {
+        login()
+        loginSubject.onError(RuntimeException())
+        verify(view).hideLoader()
+    }
+
     private fun login(login: String = "login", password: String = "password") {
         LoginController(view, api).login(login = login, password = password)
     }
@@ -108,6 +115,7 @@ interface Login {
         fun openNextScreen()
         fun showLoginError()
         fun showLoader()
+        fun hideLoader()
     }
 
     interface Api {
@@ -133,7 +141,10 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
                 .login(login, password)
                 .doOnSubscribe { view.showLoader() }
                 .doOnSuccess { view.openNextScreen() }
-                .doOnError { view.showLoginError() }
+                .doOnError {
+                    view.showLoginError()
+                    view.hideLoader()
+                }
                 .subscribe()
     }
 }
