@@ -14,69 +14,90 @@ class LoginControllerTest {
 
     @Test
     fun `should show login error when login is empty`() {
+        mockValidator()
         login(login = "")
         verify(view).showLoginEmptyError()
     }
 
     @Test
     fun `should not show login error when login is not empty`() {
+        mockValidator()
         login(login = "myLogin")
         verify(view, never()).showLoginEmptyError()
     }
 
     @Test
     fun `should show password error when password is empty`() {
+        mockValidator()
         login(password = "")
         verify(view).showPasswordEmptyError()
     }
 
     @Test
     fun `should not show password error when password is not empty`() {
+        mockValidator()
         login(password = "myPassword")
         verify(view, never()).showPasswordEmptyError()
     }
 
     @Test
     fun `should show progress bar when login initiated`() {
+        mockValidator()
         login()
         verify(view).showProgressBar()
     }
 
     @Test
     fun `should not show progress bar when login is empty`() {
+        mockValidator()
         login(login = "")
         verify(view, never()).showProgressBar()
     }
 
     @Test
     fun `should not show progress bar when password is empty`() {
+        mockValidator()
         login(password = "")
         verify(view, never()).showProgressBar()
     }
 
     @Test
     fun `should validate login credentials when not empty`() {
+        mockValidator()
         login()
         verify(validator).validate()
     }
 
     @Test
     fun `should not validate credentials when login is empty`() {
+        mockValidator()
         login(login = "")
         verify(validator, never()).validate()
     }
 
     @Test
     fun `should not validate credentials when password is empty`() {
+        mockValidator()
         login(password = "")
         verify(validator, never()).validate()
     }
 
     @Test
     fun `should show credentials error when validation fails`() {
-        whenever(validator.validate()).thenReturn(Observable.error(RuntimeException()))
+        mockValidator(Observable.error(RuntimeException()))
         login()
         verify(view).showCredentialsError()
+    }
+
+    @Test
+    fun `should not show credentials error when validation passes`() {
+        mockValidator(Observable.just(Unit))
+        login()
+        verify(view, never()).showCredentialsError()
+    }
+
+    private fun mockValidator(returnValue : Observable<Unit> = Observable.just(Unit)) {
+        whenever(validator.validate()).thenReturn(returnValue)
     }
 
     private fun login(login: String = "myLogin", password: String = "myPassword") {
@@ -104,10 +125,17 @@ class LoginController(private val view: Login.View, private val validator: Login
             password.isEmpty() -> view.showPasswordEmptyError()
             else -> {
                 view.showProgressBar()
-                validator.validate()
+                validator
+                        .validate()
+                        .subscribe(
+                                {
+                                    correct ->
+                                },
+                                {
+                                    error -> view.showCredentialsError()
+                                })
             }
         }
 
-        view.showCredentialsError()
     }
 }
