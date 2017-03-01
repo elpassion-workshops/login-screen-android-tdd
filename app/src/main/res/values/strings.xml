@@ -3,4 +3,5 @@
     <string name="loginLabel">Login</string>
     <string name="passwordLabel">Password</string>
     <string name="loginButtonText">Sign In</string>
+    <string name="emptyLogin">Login is empty</string>
 </resources>
