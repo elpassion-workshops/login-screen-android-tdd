@@ -90,7 +90,6 @@ class LoginControllerTest {
     @Test
     fun shouldNotHideLoaderIfApiCallIsNotFinished() {
         login()
-        whenever(api.performCall()).thenReturn(Single.never())
         verify(view, never()).hideLoader()
     }
 
