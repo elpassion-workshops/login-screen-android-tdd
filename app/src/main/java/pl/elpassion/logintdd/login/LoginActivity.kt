@@ -13,11 +13,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
         loginButton.setOnClickListener {
-            if ((loginInput as EditText).text.isNotEmpty() || (passwordInput as EditText).text.isNotEmpty()) {
-                loginEmptyError.visibility = View.GONE
-            } else {
-                loginEmptyError.visibility = View.VISIBLE
+            when {
+                isCredentialsNotEmpty() -> loginEmptyError.visibility = View.GONE
+                else -> loginEmptyError.visibility = View.VISIBLE
             }
         }
     }
+
+    private fun isCredentialsNotEmpty() = (loginInput as EditText).text.isNotEmpty() || (passwordInput as EditText).text.isNotEmpty()
 }
