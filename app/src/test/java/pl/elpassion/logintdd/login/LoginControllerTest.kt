@@ -124,11 +124,10 @@ class LoginController(private val view: Login.View, private val validator: Login
                         .validate()
                         .subscribe(
                                 {
-                                    correct ->
+                                    _ ->
                                 },
                                 {
-                                    error ->
-                                    view.showCredentialsError()
+                                    _ -> view.showCredentialsError()
                                 })
             }
         }
