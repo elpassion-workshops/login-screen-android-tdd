@@ -74,10 +74,7 @@ class LoginController(private val view: Login.View,
         when {
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
-        }
-
-        if (login.isNotEmpty() && password.isNotEmpty()) {
-            apiManager.login()
+            else -> apiManager.login()
         }
     }
 }
