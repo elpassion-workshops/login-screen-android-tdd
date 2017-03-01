@@ -137,19 +137,10 @@ class LoginController(private val view: Login.View, private val validator: Login
                 view.showProgressBar()
                 validator
                         .validate()
-                        .subscribe(
-                                {
-                                    _ ->
-                                },
-                                {
-                                    _ ->
-                                    view.showCredentialsError()
-                                },
-                                {
-                                    view.hideProgressBar()
-                                })
+                        .doOnComplete { view.hideProgressBar() }
+                        .doOnError { view.showCredentialsError() }
+                        .subscribe({}, {})
             }
         }
-
     }
 }
