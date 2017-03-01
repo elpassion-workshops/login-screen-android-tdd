@@ -7,14 +7,26 @@ import android.support.test.rule.ActivityTestRule
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import com.elpassion.android.commons.espresso.*
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.subjects.SingleSubject
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.logintdd.R
 
 class LoginActivityTest {
 
+    private val userSubject = SingleSubject.create<User>()
     @JvmField @Rule
-    val rule = ActivityTestRule<LoginActivity>(LoginActivity::class.java)
+    val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java){
+        override fun beforeActivityLaunched() {
+            Login.ApiProvider.override = mock<Login.Api>().apply {
+                whenever(login(any(), any())).thenReturn(userSubject)
+            }
+
+        }
+    }
 
     @Test
     fun shouldHaveLoginInputHeader() {
@@ -59,6 +71,7 @@ class LoginActivityTest {
 
     @Test
     fun shouldShowPasswordEmptyErrorWhenPasswordIsEmptyOnButtonClick() {
+        onId(R.id.loginInput).typeText("sdsdg")
         onId(R.id.loginButton).click()
         onId(R.id.passwordEmptyError).isDisplayed().hasText("Password cannot be empty")
     }
@@ -66,6 +79,15 @@ class LoginActivityTest {
     @Test
     fun shouldNotShowPasswordEmptyErrorOnStart() {
         onId(R.id.passwordEmptyError).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldShowLoginErrorOnLoginError() {
+        onId(R.id.loginInput).typeText("login")
+        onId(R.id.passwordInput).typeText("password")
+        onId(R.id.loginButton).click()
+        userSubject.onError(RuntimeException())
+        onId(R.id.loginError).isDisplayed().hasText("Login error")
     }
 }
 

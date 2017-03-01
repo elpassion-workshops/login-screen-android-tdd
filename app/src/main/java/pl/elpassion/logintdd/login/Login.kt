@@ -4,7 +4,12 @@ import io.reactivex.Single
 
 interface Login {
     interface Api {
-        fun login(login: String, password: String): Single<User>
+        fun login(login: String, password: String): Single<User> = TODO()
+    }
+    object ApiProvider {
+        var override : Login.Api? = null
+
+        fun get() = override ?: TODO()
     }
 
     interface View {
@@ -17,6 +22,6 @@ interface Login {
     }
 
     interface UserRepository {
-        fun saveUser(user: User)
+        fun saveUser(user: User): Unit = TODO()
     }
 }
