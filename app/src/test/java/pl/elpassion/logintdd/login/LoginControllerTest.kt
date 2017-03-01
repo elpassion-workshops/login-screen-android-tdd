@@ -70,6 +70,12 @@ class LoginControllerTest {
         verify(view, never()).showLoader()
     }
 
+    @Test
+    fun shouldHideLoaderAfterApiCall() {
+        login()
+        verify(view).hideLoader()
+    }
+
     private fun login(login: String = "myLogin", password: String = "password") {
         LoginController(view, api).login(login = login, password = password)
     }
@@ -80,6 +86,7 @@ interface Login {
         fun showLoginEmptyError()
         fun showPasswordEmptyError()
         fun showLoader()
+        fun hideLoader()
     }
 
     interface Api {
@@ -96,8 +103,9 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
             view.showPasswordEmptyError()
         }
         if (login.isNotEmpty() && password.isNotEmpty()) {
-            api.performCall()
             view.showLoader()
+            api.performCall()
+            view.hideLoader()
         }
     }
 }
