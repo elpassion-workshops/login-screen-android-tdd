@@ -98,6 +98,12 @@ class LoginActivityTest {
         checkIntent(MainActivity::class.java)
     }
 
+    @Test
+    fun shouldShowLoaderDuringApiCall() {
+        login()
+        onId(R.id.loader).isDisplayed()
+    }
+
     private fun mockApiSuccess() = userSubject.onSuccess(User(4))
 
     private fun mockApiError() = userSubject.onError(RuntimeException())
