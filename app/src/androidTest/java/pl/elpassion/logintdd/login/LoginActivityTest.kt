@@ -2,6 +2,7 @@ package pl.elpassion.logintdd.login
 
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.withInputType
+import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.rule.ActivityTestRule
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
@@ -17,7 +18,7 @@ class LoginActivityTest {
 
     @Test
     fun shouldHaveLoginInputHeader() {
-        onText("Login").isDisplayed()
+        onId(R.id.loginHeader).isDisplayed()
     }
 
     @Test
@@ -43,5 +44,10 @@ class LoginActivityTest {
     @Test
     fun shouldHaveLoginButton() {
         onId(R.id.loginButton).isDisplayed()
+    }
+
+    @Test
+    fun shouldLoginButtonHaveLoginText() {
+        onId(R.id.loginButton).check(matches(withText("Login")))
     }
 }
