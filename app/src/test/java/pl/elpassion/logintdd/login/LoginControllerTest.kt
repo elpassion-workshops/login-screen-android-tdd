@@ -35,12 +35,6 @@ class LoginControllerTest {
     }
 
     @Test
-    fun shouldShowLoaderWhenLoggingIn() {
-        login()
-        verify(view).showLoader()
-    }
-
-    @Test
     fun shouldNotPerformApiCallIfLoginEmpty() {
         login(login = "")
         verify(api, never()).performCall()
@@ -59,8 +53,20 @@ class LoginControllerTest {
     }
 
     @Test
+    fun shouldShowLoaderWhenLoggingIn() {
+        login()
+        verify(view).showLoader()
+    }
+
+    @Test
     fun shouldNotShowLoaderIfLoginIsEmpty() {
         login(login = "")
+        verify(view, never()).showLoader()
+    }
+
+    @Test
+    fun shouldNotShowLoaderIfPasswordIsEmpty() {
+        login(password = "")
         verify(view, never()).showLoader()
     }
 
@@ -85,14 +91,13 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
     fun login(login: String, password: String) {
         if (login.isEmpty()) {
             view.showLoginEmptyError()
-        } else {
-            view.showLoader()
         }
         if (password.isEmpty()) {
             view.showPasswordEmptyError()
         }
         if (login.isNotEmpty() && password.isNotEmpty()) {
             api.performCall()
+            view.showLoader()
         }
     }
 }
