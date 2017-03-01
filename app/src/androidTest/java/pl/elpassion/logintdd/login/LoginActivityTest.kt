@@ -107,6 +107,13 @@ class LoginActivityTest {
         checkIntent(SumOtherActivity::class.java)
     }
 
+    @Test
+    fun shoouldHideProgressBarWhenApiCallEnds() {
+        logIn()
+        loginSubject.onError(RuntimeException())
+        onId(R.id.progressBar).isNotDisplayed()
+    }
+
     private fun logIn(login: String = "login", password: String = "password") {
         onId(R.id.loginInput).typeText(login)
         onId(R.id.passwordInput).typeText(password)

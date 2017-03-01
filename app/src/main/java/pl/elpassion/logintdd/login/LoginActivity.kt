@@ -3,6 +3,7 @@ package pl.elpassion.logintdd.login
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -51,7 +52,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun hideLoader() {
-
+        progressBar.hide()
     }
 
 }
