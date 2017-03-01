@@ -87,6 +87,13 @@ class LoginControllerTest {
         verify(view, never()).hideProgress()
     }
 
+    @Test
+    fun shouldHideProgressWhenApiCallError() {
+        login()
+        publishSubject.onError(RuntimeException())
+        verify(view).hideProgress()
+    }
+
     private fun login(login: String = "login", password: String = "MargaretTatcherIs100%Sexy") {
         LoginController(view, apiManager).login(login = login, password = password)
     }
@@ -113,6 +120,8 @@ class LoginController(private val view: Login.View,
             password.isEmpty() -> view.showPasswordEmptyError()
             else -> {
                 apiManager.login().subscribe({
+                    view.hideProgress()
+                }, {
                     view.hideProgress()
                 })
                 view.showProgress()
