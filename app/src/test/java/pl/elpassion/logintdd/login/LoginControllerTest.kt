@@ -146,7 +146,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api, 
 				view.showLoader()
 				api.login()
 						.doFinally { view.hideLoader() }
-						.subscribe({ database.saveAccessToken(it) }, { view.showApiError() })
+						.subscribe(database::saveAccessToken, { view.showApiError() })
 			}
 		}
 	}
