@@ -9,6 +9,7 @@ class LoginControllerTest {
 
 	private val view = mock<Login.View>()
 	private val api = mock<Login.Api>()
+	private val database = mock<Login.Database>()
 
 	@Test
 	fun shouldShowErrorWhenLoginIsEmpty() {
@@ -58,8 +59,14 @@ class LoginControllerTest {
 		verify(api, never()).login()
 	}
 
+	@Test
+	fun shouldPersistAccessTokenOnSuccessfulLogin() {
+		login()
+		verify(database).saveAccessToken()
+	}
+
 	private fun login(login: String = "login", password: String = "password") {
-		LoginController(view, api).login(login = login, password = password)
+		LoginController(view, api, database).login(login = login, password = password)
 	}
 }
 
@@ -72,9 +79,13 @@ interface Login {
 	interface Api {
 		fun login()
 	}
+
+	interface Database {
+		fun saveAccessToken()
+	}
 }
 
-class LoginController(private val view: Login.View, private val api: Login.Api) {
+class LoginController(private val view: Login.View, private val api: Login.Api, private val database: Login.Database) {
 
 	fun login(login: String, password: String) {
 		when {
@@ -82,5 +93,6 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
 			password.isEmpty() -> view.showPasswordEmptyError()
 			else -> api.login()
 		}
+		database.saveAccessToken()
 	}
 }
