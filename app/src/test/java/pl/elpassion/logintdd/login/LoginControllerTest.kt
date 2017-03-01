@@ -33,6 +33,12 @@ class LoginControllerTest {
         verify(view, never()).showPasswordEmptyError()
     }
 
+    @Test
+    fun shouldShowLoaderWhenLoggingIn() {
+        login()
+        verify(view).showLoader()
+    }
+
     private fun login(login: String = "myLogin", password: String = "password") {
         LoginController(view).login(login = login, password = password)
     }
@@ -42,11 +48,13 @@ interface Login {
     interface View {
         fun showLoginEmptyError()
         fun showPasswordEmptyError()
+        fun showLoader()
     }
 }
 
 class LoginController(private val view: Login.View) {
     fun login(login: String, password: String) {
+        view.showLoader()
         if (login.isEmpty()) {
             view.showLoginEmptyError()
         }
