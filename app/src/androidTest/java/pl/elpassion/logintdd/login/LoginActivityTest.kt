@@ -13,7 +13,7 @@ class LoginActivityTest {
 
     @Test
     fun shouldHaveLoginInputHeader() {
-        onText("Login").isDisplayed()
+        onText(R.string.login).isDisplayed()
     }
 
     @Test
@@ -23,6 +23,11 @@ class LoginActivityTest {
 
     @Test
     fun shouldHavePasswordInputHeader() {
-        onText("Password").isDisplayed()
+        onText(R.string.password).isDisplayed()
+    }
+
+    @Test
+    fun shouldHavePasswordInput() {
+        onId(R.id.passwordInput).typeText("password").hasText("password")
     }
 }
