@@ -38,6 +38,11 @@ class LoginActivityTest {
     }
 
     @Test
+    fun shouldHaveLoginButton() {
+        onText(R.string.login_button_text).isDisplayed()
+    }
+
+    @Test
     fun shouldPasswordBePunctuated() {
         onId(R.id.passwordInput)
                 .check(matches(withInputType(TYPE_TEXT_VARIATION_PASSWORD or TYPE_CLASS_TEXT)))
