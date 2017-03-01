@@ -30,11 +30,11 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun showEmptyLoginError() {
-        loginEmptyError.visibility = View.VISIBLE
+        error.visibility = View.VISIBLE
     }
 
     override fun showEmptyPasswordError() {
-        loginEmptyError.visibility = View.VISIBLE
+        error.visibility = View.VISIBLE
     }
 
     override fun openNextScreen() {
