@@ -92,7 +92,7 @@ class LoginControllerTest {
     }
 
     @Test
-    fun `should hide progress bar when validation ends`() {
+    fun `should hide progress bar when validation passes`() {
         login()
         verify(view).hideProgressBar()
 
@@ -133,7 +133,6 @@ class LoginController(private val view: Login.View, private val validator: Login
                         .subscribe(
                                 {
                                     _ ->
-                                    view.hideProgressBar()
                                 },
                                 {
                                     _ ->
@@ -141,6 +140,6 @@ class LoginController(private val view: Login.View, private val validator: Login
                                 })
             }
         }
-
+        view.hideProgressBar()
     }
 }
