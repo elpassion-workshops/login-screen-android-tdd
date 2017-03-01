@@ -46,6 +46,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun showLoader() {
+        progressBar.show()
     }
 
     override fun hideLoader() {

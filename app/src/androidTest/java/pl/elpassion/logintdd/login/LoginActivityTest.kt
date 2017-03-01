@@ -70,7 +70,14 @@ class LoginActivityTest {
 
     @Test
     fun shouldShowProgressBar() {
+        onId(R.id.loginInput).typeText("login")
+        onId(R.id.passwordInput).typeText("password")
         onId(R.id.loginButton).click()
         onId(R.id.progressBar).isDisplayed()
+    }
+
+    @Test
+    fun shouldStartWithHiddenProgressBar() {
+        onId(R.id.progressBar).isNotDisplayed()
     }
 }
