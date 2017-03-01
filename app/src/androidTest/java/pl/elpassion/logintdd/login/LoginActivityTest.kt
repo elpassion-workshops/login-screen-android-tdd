@@ -56,6 +56,6 @@ class LoginActivityTest {
     @Test
     fun shouldShowEmptyLoginError() {
         onText(R.string.loginButtonText).click()
-        onId(R.id.emptyLoginErrorTextView).hasText(R.string.emptyLogin).isDisplayed()
+        onText(R.string.emptyLogin).isDisplayed()
     }
 }
