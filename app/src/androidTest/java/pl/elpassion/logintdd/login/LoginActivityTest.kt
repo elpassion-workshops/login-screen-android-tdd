@@ -59,16 +59,18 @@ class LoginActivityTest {
     }
 
     @Test
-    fun shouldNotShowErrorWhenLoginNotEmpty() {
+    fun shouldNotShowErrorWhenPasswordNotEmpty() {
         onId(R.id.loginInput).typeText("login")
+        onId(R.id.passwordInput).typeText("password")
         onId(R.id.loginButton).click()
         onId(R.id.loginEmptyError).isNotDisplayed()
     }
 
     @Test
-    fun shouldNotShowErrorWhenPasswordNotEmpty() {
-        onId(R.id.passwordInput).typeText("password")
+    fun shouldShowErrorWhenPasswordEmptyAndLoginNotEmpty() {
+        onId(R.id.passwordInput).typeText("")
+        onId(R.id.loginInput).typeText("login")
         onId(R.id.loginButton).click()
-        onId(R.id.loginEmptyError).isNotDisplayed()
+        onId(R.id.loginEmptyError).isDisplayed()
     }
 }
