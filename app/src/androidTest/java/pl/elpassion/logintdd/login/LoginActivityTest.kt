@@ -54,6 +54,6 @@ class LoginActivityTest {
     @Test
     fun shouldShowLoginErrorWhenClickLoginButton() {
         onId(R.id.loginButton).click()
-        onId(R.id.loginError).check(matches(withText("Login error")))
+        onId(R.id.loginError).check(matches(withText("Login error"))).isDisplayed()
     }
 }
