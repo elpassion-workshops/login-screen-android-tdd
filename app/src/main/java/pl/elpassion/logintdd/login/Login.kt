@@ -22,6 +22,6 @@ interface Login {
     }
 
     interface UserRepository {
-        fun saveUser(user: User): Unit = TODO()
+        fun saveUser(user: User) = Unit
     }
 }

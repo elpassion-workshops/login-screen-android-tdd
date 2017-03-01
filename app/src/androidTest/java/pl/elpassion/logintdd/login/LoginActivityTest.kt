@@ -13,6 +13,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.SingleSubject
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.logintdd.MainActivity
 import pl.elpassion.logintdd.R
 
 class LoginActivityTest {
@@ -27,6 +28,9 @@ class LoginActivityTest {
 
         }
     }
+
+    @JvmField @Rule
+    val intentRule = InitIntentsRule()
 
     @Test
     fun shouldHaveLoginInputHeader() {
@@ -86,6 +90,17 @@ class LoginActivityTest {
         login()
         mockApiError()
         onId(R.id.loginError).isDisplayed().hasText("Login error")
+    }
+
+    @Test
+    fun shouldOpenNextScreenOnLoginSuccess () {
+        login()
+        mockApiSuccess()
+        checkIntent(MainActivity::class.java)
+    }
+
+    private fun mockApiSuccess() {
+        userSubject.onSuccess(User(4))
     }
 
     private fun mockApiError() {

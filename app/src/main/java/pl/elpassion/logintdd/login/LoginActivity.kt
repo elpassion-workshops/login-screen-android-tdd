@@ -1,11 +1,13 @@
 package pl.elpassion.logintdd.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.elpassion.android.view.show
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.login_activity.*
+import pl.elpassion.logintdd.MainActivity
 import pl.elpassion.logintdd.R
 
 class LoginActivity : AppCompatActivity(), Login.View{
@@ -32,9 +34,7 @@ class LoginActivity : AppCompatActivity(), Login.View{
         passwordEmptyError.show()
     }
 
-    override fun openNextScreen() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun openNextScreen() = startActivity(Intent(this, MainActivity::class.java))
 
     override fun showLoginFailed() {
         loginError.show()
