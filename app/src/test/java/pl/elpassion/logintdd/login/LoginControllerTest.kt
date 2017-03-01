@@ -7,7 +7,7 @@ import org.mockito.Mockito.verify
 
 class LoginControllerTest {
     private val view = mock<Login.View>()
-    private val api = mock<Login.Validator>()
+    private val validator = mock<Login.Validator>()
 
     @Test
     fun `should show login error when login is empty`() {
@@ -54,11 +54,11 @@ class LoginControllerTest {
     @Test
     fun `should validate login credentials when not empty`() {
         login()
-        verify(api).validate()
+        verify(validator).validate()
     }
 
     private fun login(login: String= "myLogin", password: String = "myPassword") {
-        LoginController(view, api).login(login = login, password = password)
+        LoginController(view, validator).login(login = login, password = password)
     }
 }
 
