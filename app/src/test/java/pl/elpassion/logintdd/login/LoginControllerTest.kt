@@ -46,8 +46,20 @@ class LoginControllerTest {
         verify(api, never()).performCall()
     }
 
+    @Test
+    fun shouldNotPerformApiCallIfPasswordEmpty() {
+        login(password = "")
+        verify(api, never()).performCall()
+    }
+
+    @Test
+    fun shouldPerformApiCallIfLoginDataIsNotEmpty() {
+        login(login = "login", password = "password")
+        verify(api).performCall()
+    }
+
     private fun login(login: String = "myLogin", password: String = "password") {
-        LoginController(view).login(login = login, password = password)
+        LoginController(view, api).login(login = login, password = password)
     }
 }
 
@@ -63,7 +75,7 @@ interface Login {
     }
 }
 
-class LoginController(private val view: Login.View) {
+class LoginController(private val view: Login.View, private val api: Login.Api) {
     fun login(login: String, password: String) {
         view.showLoader()
         if (login.isEmpty()) {
@@ -71,6 +83,9 @@ class LoginController(private val view: Login.View) {
         }
         if (password.isEmpty()) {
             view.showPasswordEmptyError()
+        }
+        if(login.isNotEmpty() && password.isNotEmpty()) {
+            api.performCall()
         }
     }
 }
