@@ -28,7 +28,7 @@ class LoginControllerTest {
 
     @Test
     fun shouldNotShowErrorWhenLoginIsNotEmpty() {
-        login(login = "login")
+        login()
         verify(view, never()).showLoginEmptyError()
     }
 
@@ -40,31 +40,31 @@ class LoginControllerTest {
 
     @Test
     fun shouldNotShowErrorWhenPasswordIsNotEmpty() {
-        login(password = "MargaretTatcherIs100%Sexy")
+        login()
         verify(view, never()).showPasswordEmptyError()
     }
 
     @Test
     fun shouldCallApiWhenLoginAndPasswordAreNotEmpty() {
-        login(login = "login", password = "MargaretTatcherIs100%Sexy")
+        login()
         verify(apiManager).login()
     }
 
     @Test
     fun shouldNotCallApiWhenLoginIsEmpty() {
-        login(login = "", password = "MargaretTatcherIs100%Sexy")
+        login(login = "")
         verify(apiManager, never()).login()
     }
 
     @Test
     fun shouldNotCallApiWhenPasswordIsEmpty() {
-        login(login = "login", password = "")
+        login(password = "")
         verify(apiManager, never()).login()
     }
 
     @Test
     fun shouldShowProgressWhenApiCall() {
-        login(login = "login", password = "MargaretTatcherIs100%Sexy")
+        login()
         verify(view).showProgress()
     }
 
