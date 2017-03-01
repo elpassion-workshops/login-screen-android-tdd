@@ -28,7 +28,7 @@ class LoginControllerTest {
     }
 
     @Test
-    fun shouldShowNotErrorWhenPasswordIsNotEmpty() {
+    fun shouldNotShowErrorWhenPasswordIsNotEmpty() {
         login(password = "password")
         verify(view, never()).showPasswordEmptyError()
     }
