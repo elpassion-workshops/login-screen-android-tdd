@@ -63,6 +63,12 @@ class LoginControllerTest {
         verify(validator, never()).validate()
     }
 
+    @Test
+    fun `should not validate credentials when password is empty`() {
+        login(password = "")
+        verify(validator, never()).validate()
+    }
+
     private fun login(login: String = "myLogin", password: String = "myPassword") {
         LoginController(view, validator).login(login = login, password = password)
     }
