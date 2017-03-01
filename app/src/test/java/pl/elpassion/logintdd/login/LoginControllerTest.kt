@@ -14,7 +14,8 @@ class LoginControllerTest {
 
     private val view = mock<Login.View>()
     private val api = mock<Login.Api>()
-    private val loginSubject = SingleSubject.create<Unit>()
+    private val authStorage = mock<Login.AuthStorage>()
+    private val loginSubject = SingleSubject.create<String>()
 
     @Before
     fun setUp() {
@@ -56,7 +57,7 @@ class LoginControllerTest {
         login(password = "")
         verify(api, never()).login(any(), any())
     }
-    
+
     @Test
     fun `should show login and password errors when they are empty`() {
         login(login = "", password = "")
@@ -69,7 +70,7 @@ class LoginControllerTest {
         login(login = "myLogin", password = "myPassword")
         verify(api).login(login = "myLogin", password = "myPassword")
     }
-    
+
     @Test
     fun `should call login API with entered login and password (case 2)`() {
         login(login = "login", password = "password")
@@ -79,17 +80,17 @@ class LoginControllerTest {
     @Test
     fun `should open next screen on successful login`() {
         login()
-        loginSubject.onSuccess(Unit)
+        loginSubject.onSuccess("token")
         verify(view).openNextScreen()
     }
-    
+
     @Test
     fun `should show error on unsuccessful login`() {
         login()
         loginSubject.onError(RuntimeException())
         verify(view).showLoginError()
     }
-    
+
     @Test
     fun `should show loader while performing login API call`() {
         login()
@@ -103,8 +104,15 @@ class LoginControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun `should save auth credentials on successful login`() {
+        login()
+        loginSubject.onSuccess("token")
+        verify(authStorage).saveCredentials("token")
+    }
+
     private fun login(login: String = "login", password: String = "password") {
-        LoginController(view, api).login(login = login, password = password)
+        LoginController(view, api, authStorage).login(login = login, password = password)
     }
 }
 
@@ -119,11 +127,15 @@ interface Login {
     }
 
     interface Api {
-        fun login(login: String, password: String) : Single<Unit>
+        fun login(login: String, password: String): Single<String>
+    }
+
+    interface AuthStorage {
+        fun saveCredentials(token: String)
     }
 }
 
-class LoginController(private val view: Login.View, private val api: Login.Api) {
+class LoginController(private val view: Login.View, private val api: Login.Api, private val authStorage: Login.AuthStorage) {
     fun login(login: String, password: String) {
         when {
             login.isEmpty() and password.isEmpty() -> {
@@ -140,7 +152,10 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
         api
                 .login(login, password)
                 .doOnSubscribe { view.showLoader() }
-                .doOnSuccess { view.openNextScreen() }
+                .doOnSuccess { token ->
+                    authStorage.saveCredentials(token)
+                    view.openNextScreen()
+                }
                 .doOnError {
                     view.showLoginError()
                     view.hideLoader()
