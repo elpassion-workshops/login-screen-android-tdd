@@ -52,14 +52,13 @@ class LoginActivityTest {
 
     @Test
     fun shouldShowErrorMessageWhenEmptyLogin() {
-        onId(R.id.loginButton).click()
+        logIn(login = "")
         onId(R.id.errorMessage).isDisplayed()
     }
 
     @Test
     fun shouldShowErrorWhenEmptyPassword() {
-        onId(R.id.loginInput).typeText("login")
-        onId(R.id.loginButton).click()
+        logIn(password = "")
         onId(R.id.emptyPasswordError).isDisplayed()
     }
 
@@ -70,14 +69,18 @@ class LoginActivityTest {
 
     @Test
     fun shouldShowProgressBar() {
-        onId(R.id.loginInput).typeText("login")
-        onId(R.id.passwordInput).typeText("password")
-        onId(R.id.loginButton).click()
+        logIn()
         onId(R.id.progressBar).isDisplayed()
     }
 
     @Test
     fun shouldStartWithHiddenProgressBar() {
         onId(R.id.progressBar).isNotDisplayed()
+    }
+
+    private fun logIn(login: String = "login", password: String = "password") {
+        onId(R.id.loginInput).typeText(login)
+        onId(R.id.passwordInput).typeText(password)
+        onId(R.id.loginButton).click()
     }
 }
