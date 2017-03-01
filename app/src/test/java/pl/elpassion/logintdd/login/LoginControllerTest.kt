@@ -2,6 +2,9 @@ package pl.elpassion.logintdd.login
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Single
+import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.verify
 
@@ -10,6 +13,11 @@ class LoginControllerTest {
 	private val view = mock<Login.View>()
 	private val api = mock<Login.Api>()
 	private val database = mock<Login.Database>()
+
+	@Before
+	fun setUp() {
+		whenever(api.login()).thenReturn(Single.never())
+	}
 
 	@Test
 	fun shouldShowErrorWhenLoginIsEmpty() {
@@ -73,8 +81,16 @@ class LoginControllerTest {
 
 	@Test
 	fun shouldHideLoaderWhenApiCallFinished() {
+		whenever(api.login()).thenReturn(Single.just(Unit))
 		login()
 		verify(view).hideLoader()
+	}
+
+	@Test
+	fun shouldNotHideLoaderWhenApiCallNotFinished() {
+		whenever(api.login()).thenReturn(Single.never())
+		login()
+		verify(view, never()).hideLoader()
 	}
 
 	private fun login(login: String = "login", password: String = "password") {
@@ -91,7 +107,7 @@ interface Login {
 	}
 
 	interface Api {
-		fun login()
+		fun login(): Single<Unit>
 	}
 
 	interface Database {
@@ -107,10 +123,9 @@ class LoginController(private val view: Login.View, private val api: Login.Api, 
 			password.isEmpty() -> view.showPasswordEmptyError()
 			else -> {
 				view.showLoader()
-				api.login()
+				api.login().subscribe({ view.hideLoader() }, {})
 			}
 		}
 		database.saveAccessToken()
-		view.hideLoader()
 	}
 }
