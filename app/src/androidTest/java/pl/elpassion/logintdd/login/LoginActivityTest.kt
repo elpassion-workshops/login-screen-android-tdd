@@ -3,8 +3,8 @@ package pl.elpassion.logintdd.login
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.withInputType
 import android.support.test.rule.ActivityTestRule
-import android.text.InputType
-import android.text.InputType.*
+import android.text.InputType.TYPE_CLASS_TEXT
+import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import com.elpassion.android.commons.espresso.*
 import org.junit.Rule
 import org.junit.Test
@@ -38,13 +38,13 @@ class LoginActivityTest {
     }
 
     @Test
-    fun shouldHaveLoginButton() {
-        onText(R.string.login_button_text).isDisplayed()
-    }
-
-    @Test
     fun shouldPasswordBePunctuated() {
         onId(R.id.passwordInput)
                 .check(matches(withInputType(TYPE_TEXT_VARIATION_PASSWORD or TYPE_CLASS_TEXT)))
+    }
+
+    @Test
+    fun shouldHaveLoginButton() {
+        onText(R.string.login_button_text).isDisplayed()
     }
 }
