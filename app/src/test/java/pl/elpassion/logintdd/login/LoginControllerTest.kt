@@ -62,16 +62,20 @@ class LoginControllerTest {
 
     @Test
     fun shouldShowApiErrorWhenLoginFails() {
-        whenever(api.loginUser(any(), any())).thenReturn(false)
-        login("testLogin", "testPassword")
+        apiLoginReturns(false)
+        login()
         verify(view).showApiError()
     }
 
     @Test
     fun shouldNotShowApiErrorWhenLoginNotFails() {
-        whenever(api.loginUser(any(), any())).thenReturn(true)
-        login("testLogin", "testLogin")
+        apiLoginReturns(true)
+        login()
         verify(view, never()).showApiError()
+    }
+
+    private fun apiLoginReturns(result: Boolean) {
+        whenever(api.loginUser(any(), any())).thenReturn(result)
     }
 
     private fun login(login: String = "login", password: String = "password") {
