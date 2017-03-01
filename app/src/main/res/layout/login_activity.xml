@@ -38,4 +38,12 @@
         android:text="Login error"
         android:id="@+id/loginError"
         android:visibility="gone"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password error"
+        android:id="@+id/passwordError"/>
+
 </LinearLayout>

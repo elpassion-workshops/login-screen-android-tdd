@@ -61,4 +61,10 @@ class LoginActivityTest {
     fun shouldNotShowLoginErrorOnStart() {
         onId(R.id.loginError).isNotDisplayed()
     }
+
+    @Test
+    fun shouldShowPasswordErrorWhenClickLoginButton() {
+        onId(R.id.loginButton).click()
+        onId(R.id.passwordError).check(matches(withText("Password error"))).isDisplayed()
+    }
 }
