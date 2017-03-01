@@ -7,6 +7,9 @@ import io.reactivex.Single
 import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Matchers
+import org.mockito.Matchers.*
+import org.mockito.Mockito.any
 import org.mockito.Mockito.verify
 
 class LoginControllerTest {
@@ -72,7 +75,10 @@ class LoginControllerTest {
 	@Test
 	fun shouldPersistAccessTokenOnSuccessfulLogin() {
 		login()
-		verify(database).saveAccessToken()
+
+		apiSubject.onSuccess(Unit)
+
+		verify(database).saveAccessToken(anyString())
 	}
 
 	@Test
@@ -112,7 +118,7 @@ interface Login {
 	}
 
 	interface Database {
-		fun saveAccessToken()
+		fun saveAccessToken(token: String)
 	}
 }
 
@@ -124,9 +130,11 @@ class LoginController(private val view: Login.View, private val api: Login.Api, 
 			password.isEmpty() -> view.showPasswordEmptyError()
 			else -> {
 				view.showLoader()
-				api.login().subscribe({ view.hideLoader() }, {})
+				api.login().subscribe({
+					view.hideLoader()
+					database.saveAccessToken("")
+				}, {})
 			}
 		}
-		database.saveAccessToken()
 	}
 }
