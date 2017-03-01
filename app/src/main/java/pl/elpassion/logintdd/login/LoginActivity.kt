@@ -10,15 +10,22 @@ import pl.elpassion.logintdd.R
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
+    private val loginApi = object : Login.Api {
+        override fun login(login: String, password: String): Single<User> = Single.just(User(0))
+    }
+
+    private val repository = object : Login.UserRepository {
+        override fun saveUser(user: User) {}
+    }
+
+    private val scheduler = Schedulers.trampoline()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
 
-        val controller = LoginController(api = object : Login.Api{
-            override fun login(login: String, password: String): Single<User>  = Single.just(User(0))
-        }, view = this, userRepository = object : Login.UserRepository {
-            override fun saveUser(user: User) {}
-        }, observeOnScheduler = Schedulers.trampoline(), subscribeOnScheduler = Schedulers.trampoline())
+        val controller = LoginController(api = loginApi, view = this, userRepository = repository,
+                observeOnScheduler = scheduler, subscribeOnScheduler = scheduler)
 
         loginButton.setOnClickListener {
             controller.onLogin(loginInput.text.toString(), passwordInput.text.toString())
