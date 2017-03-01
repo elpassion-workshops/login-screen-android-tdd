@@ -1,10 +1,10 @@
 package pl.elpassion.logintdd.login
 
 import android.support.test.rule.ActivityTestRule
-import com.elpassion.android.commons.espresso.isDisplayed
-import com.elpassion.android.commons.espresso.onText
+import com.elpassion.android.commons.espresso.*
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.logintdd.R
 
 class LoginActivityTest {
 
@@ -14,5 +14,10 @@ class LoginActivityTest {
     @Test
     fun shouldHaveLoginInputHeader() {
         onText("Login").isDisplayed()
+    }
+
+    @Test
+    fun shouldHaveLoginInput() {
+        onId(R.id.loginInput).typeText("login").hasText("login")
     }
 }
