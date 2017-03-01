@@ -31,14 +31,14 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/loginError"
+        android:id="@+id/loginEmptyError"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login cannot be empty" />
 
     <TextView
-        android:id="@+id/passwordError"
+        android:id="@+id/passwordEmptyError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Password cannot be empty" />
