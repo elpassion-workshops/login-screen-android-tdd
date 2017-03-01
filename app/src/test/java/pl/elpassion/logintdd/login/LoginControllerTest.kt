@@ -33,7 +33,7 @@ class LoginControllerTest {
         login(password = "myPass")
         verify(view, never()).showPasswordEmptyError()
     }
-    
+
     @Test
     fun `should call login API on login`() {
         login()
@@ -62,6 +62,7 @@ interface Login {
         fun showLoginEmptyError()
         fun showPasswordEmptyError()
     }
+
     interface Api {
         fun login()
     }
@@ -70,7 +71,7 @@ interface Login {
 class LoginController(private val view: Login.View, private val api: Login.Api) {
     fun login(login: String, password: String) {
         if (login.isEmpty()) view.showLoginEmptyError()
-        else  if (password.isEmpty()) view.showPasswordEmptyError()
+        else if (password.isEmpty()) view.showPasswordEmptyError()
         else api.login()
     }
 }
