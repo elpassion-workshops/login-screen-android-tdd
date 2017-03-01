@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
+import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.verify
@@ -13,10 +14,11 @@ class LoginControllerTest {
 	private val view = mock<Login.View>()
 	private val api = mock<Login.Api>()
 	private val database = mock<Login.Database>()
+	private val apiSubject = SingleSubject.create<Unit>()
 
 	@Before
 	fun setUp() {
-		whenever(api.login()).thenReturn(Single.never())
+		whenever(api.login()).thenReturn(apiSubject)
 	}
 
 	@Test
@@ -81,14 +83,13 @@ class LoginControllerTest {
 
 	@Test
 	fun shouldHideLoaderWhenApiCallFinished() {
-		whenever(api.login()).thenReturn(Single.just(Unit))
 		login()
+		apiSubject.onSuccess(Unit)
 		verify(view).hideLoader()
 	}
 
 	@Test
 	fun shouldNotHideLoaderUntilApiCallNotFinished() {
-		whenever(api.login()).thenReturn(Single.never())
 		login()
 		verify(view, never()).hideLoader()
 	}
