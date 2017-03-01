@@ -98,6 +98,13 @@ class LoginControllerTest {
 
     }
 
+    @Test
+    fun `should not hide progress bar until validation passes`() {
+        mockValidator(Observable.never())
+        login()
+        verify(view, never()).hideProgressBar()
+    }
+
     private fun mockValidator(returnValue: Observable<Unit> = Observable.just(Unit)) {
         whenever(validator.validate()).thenReturn(returnValue)
     }
@@ -137,9 +144,12 @@ class LoginController(private val view: Login.View, private val validator: Login
                                 {
                                     _ ->
                                     view.showCredentialsError()
+                                },
+                                {
+                                    view.hideProgressBar()
                                 })
             }
         }
-        view.hideProgressBar()
+
     }
 }
