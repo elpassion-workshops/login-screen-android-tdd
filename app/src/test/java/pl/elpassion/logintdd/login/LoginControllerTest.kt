@@ -3,6 +3,9 @@ package pl.elpassion.logintdd.login
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Single
+import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.verify
 
@@ -10,6 +13,11 @@ class LoginControllerTest {
 
     private val view = mock<Login.View>()
     private val api = mock<Login.Api>()
+
+    @Before
+    fun setUp() {
+        whenever(api.login(any(), any())).thenReturn(Single.just(Unit))
+    }
 
     @Test
     fun shouldShowErrorWhenLoginIsEmpty() {
@@ -66,6 +74,12 @@ class LoginControllerTest {
         verify(api).login(login = "login", password = "password")
     }
 
+    @Test
+    fun `should open next screen on successful login`() {
+        login()
+        verify(view).openNextScreen()
+    }
+    
     private fun login(login: String = "login", password: String = "password") {
         LoginController(view, api).login(login = login, password = password)
     }
@@ -75,10 +89,11 @@ interface Login {
     interface View {
         fun showLoginEmptyError()
         fun showPasswordEmptyError()
+        fun openNextScreen()
     }
 
     interface Api {
-        fun login(login: String, password: String)
+        fun login(login: String, password: String) : Single<Unit>
     }
 }
 
@@ -91,7 +106,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
             }
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
-            else -> api.login(login, password)
+            else -> api.login(login, password).subscribe { result -> view.openNextScreen()}
         }
     }
 }
