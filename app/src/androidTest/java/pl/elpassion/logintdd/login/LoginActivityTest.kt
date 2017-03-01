@@ -49,18 +49,18 @@ class LoginActivityTest {
     @Test
     fun shouldShowLoginEmptyErrorWhenLoginIsEmptyOnButtonClick() {
         onId(R.id.loginButton).click()
-        onId(R.id.loginError).isDisplayed().hasText("Login cannot be empty")
+        onId(R.id.loginEmptyError).isDisplayed().hasText("Login cannot be empty")
     }
 
     @Test
     fun shouldNotShowLoginEmptyErrorWhenButtonIsNotClicked() {
-        onId(R.id.loginError).isNotDisplayed()
+        onId(R.id.loginEmptyError).isNotDisplayed()
     }
 
     @Test
-    fun shouldShowPasswordEmptyErrorWhenPassworIsEmptyOnButtonClick() {
+    fun shouldShowPasswordEmptyErrorWhenPasswordIsEmptyOnButtonClick() {
         onId(R.id.loginButton).click()
-        onId(R.id.passwordError).isDisplayed().hasText("Password cannot be empty")
+        onId(R.id.passwordEmptyError).isDisplayed().hasText("Password cannot be empty")
     }
 }
 
