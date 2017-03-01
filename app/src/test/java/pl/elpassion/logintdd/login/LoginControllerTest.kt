@@ -1,5 +1,6 @@
 package pl.elpassion.logintdd.login
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import org.junit.Test
@@ -37,19 +38,19 @@ class LoginControllerTest {
     @Test
     fun `should call login API on login`() {
         login()
-        verify(api).login("myLogin", "myPassword")
+        verify(api).login(any(), any())
     }
 
     @Test
     fun `should not call login API when login is empty`() {
         login(login = "")
-        verify(api, never()).login("myLogin", "myPassword")
+        verify(api, never()).login(any(), any())
     }
 
     @Test
     fun `should not call login API when password is empty`() {
         login(password = "")
-        verify(api, never()).login("myLogin", "myPassword")
+        verify(api, never()).login(any(), any())
     }
     
     @Test
