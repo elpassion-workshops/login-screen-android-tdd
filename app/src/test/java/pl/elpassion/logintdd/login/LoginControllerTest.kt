@@ -3,8 +3,8 @@ package pl.elpassion.logintdd.login
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.Single
+import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.verify
@@ -13,7 +13,7 @@ class LoginControllerTest {
     private val view = mock<Login.View>()
     private val validator = mock<Login.Validator>()
     private val apiTokenStore = mock<Login.ApiTokenStore>()
-    private val loginSubject = PublishSubject.create<Unit>()
+    private val loginSubject = SingleSubject.create<Unit>()
 
     @Before
     fun setUp() {
@@ -90,14 +90,14 @@ class LoginControllerTest {
     @Test
     fun `should not show credentials error when validation passes`() {
         login()
-        loginSubject.onNext(Unit)
+        loginSubject.onSuccess(Unit)
         verify(view, never()).showCredentialsError()
     }
 
     @Test
     fun `should hide progress bar when validation passes`() {
         login()
-        loginSubject.onComplete()
+        loginSubject.onSuccess(Unit)
         verify(view).hideProgressBar()
     }
 
@@ -111,10 +111,6 @@ class LoginControllerTest {
     fun `should save authentication token when validation passes`() {
         login()
         verify(apiTokenStore).saveToken()
-    }
-
-    private fun mockValidator(returnValue: Observable<Unit> = Observable.just(Unit)) {
-        whenever(validator.validate()).thenReturn(returnValue)
     }
 
     private fun login(login: String = "myLogin", password: String = "myPassword") {
@@ -132,7 +128,7 @@ interface Login {
     }
 
     interface Validator {
-        fun validate(): Observable<Unit>
+        fun validate(): Single<Unit>
     }
 
     interface ApiTokenStore {
@@ -150,7 +146,7 @@ class LoginController(private val view: Login.View, private val validator: Login
                 validator
                         .validate()
                         .doOnError { view.showCredentialsError() }
-                        .doOnComplete { view.hideProgressBar() }
+                        .doOnSuccess { view.hideProgressBar() }
                         .subscribe({}, {})
             }
         }
