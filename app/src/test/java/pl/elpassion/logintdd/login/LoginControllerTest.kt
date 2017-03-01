@@ -121,6 +121,13 @@ class LoginControllerTest {
         verify(apiTokenStore, never()).saveToken()
     }
 
+    @Test
+    fun `should hide progress bar when validation fails`() {
+        login()
+        loginSubject.onError(RuntimeException())
+        verify(view).hideProgressBar()
+    }
+
     private fun login(login: String = "myLogin", password: String = "myPassword") {
         LoginController(view, validator, apiTokenStore).login(login = login, password = password)
     }
@@ -158,7 +165,10 @@ class LoginController(private val view: Login.View, private val validator: Login
         view.showProgressBar()
         validator
                 .validate()
-                .doOnError { view.showCredentialsError() }
+                .doOnError {
+                    view.showCredentialsError()
+                    view.hideProgressBar()
+                }
                 .doOnSuccess {
                     view.hideProgressBar()
                     apiTokenStore.saveToken()
