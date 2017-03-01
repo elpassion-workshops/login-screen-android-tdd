@@ -16,7 +16,7 @@ class LoginControllerTest {
     }
 
     @Test
-    fun shouldNotShowErrorWhenLoginIsNotEmpty() {
+    fun shouldNotShowLoginErrorWhenLoginIsNotEmpty() {
         login(login = "myLogin")
         verify(view, never()).showLoginEmptyError()
     }
