@@ -57,7 +57,13 @@ class LoginControllerTest {
         verify(validator).validate()
     }
 
-    private fun login(login: String= "myLogin", password: String = "myPassword") {
+    @Test
+    fun `should not validate credentials when login is empty`() {
+        login(login = "")
+        verify(validator, never()).validate()
+    }
+
+    private fun login(login: String = "myLogin", password: String = "myPassword") {
         LoginController(view, validator).login(login = login, password = password)
     }
 }
@@ -76,12 +82,13 @@ interface Login {
 
 class LoginController(private val view: Login.View, private val validator: Login.Validator) {
     fun login(login: String, password: String) {
-        when{
+        when {
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
-            else -> view.showProgressBar()
+            else -> {
+                view.showProgressBar()
+                validator.validate()
+            }
         }
-
-        validator.validate()
     }
 }
