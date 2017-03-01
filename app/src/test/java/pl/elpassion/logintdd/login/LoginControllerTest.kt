@@ -11,17 +11,23 @@ class LoginControllerTest {
 
     @Test
     fun shouldShowErrorWhenLoginIsEmpty() {
-        login(login = "")
+        login(login = "", password = "")
         verify(view).showLoginEmptyError()
     }
 
     @Test
     fun shouldNotShowErrorWhenLoginIsNotEmpty() {
-        login(login = "myLogin")
+        login(login = "myLogin", password = "")
         verify(view, never()).showLoginEmptyError()
     }
 
-    private fun login(login: String) {
+    @Test
+    fun shouldShowErrorWhenPasswordIsEmpty() {
+        login(password = "")
+        verify(view).showPasswordEmptyError()
+    }
+
+    private fun login(login: String = "login", password: String) {
         LoginController(view).login(login = login)
     }
 }
@@ -29,6 +35,7 @@ class LoginControllerTest {
 interface Login {
     interface View {
         fun showLoginEmptyError()
+        fun showPasswordEmptyError()
     }
 }
 
@@ -37,5 +44,6 @@ class LoginController(private val view: Login.View) {
         if (login.isEmpty()) {
             view.showLoginEmptyError()
         }
+        view.showPasswordEmptyError()
     }
 }
