@@ -74,6 +74,13 @@ class LoginControllerTest {
         verify(view, never()).showApiError()
     }
 
+    @Test
+    fun shouldMoveToNextScreenWhenNotError() {
+        apiLoginReturns(true)
+        login()
+        verify(view).moveToNextScreen()
+    }
+
     private fun apiLoginReturns(result: Boolean) {
         whenever(api.loginUser(any(), any())).thenReturn(result)
     }
@@ -88,6 +95,7 @@ interface Login {
         fun showLoginEmptyError()
         fun showPasswordEmptyError()
         fun showApiError()
+        fun moveToNextScreen()
     }
 
     interface Api {
@@ -101,7 +109,9 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
             else -> {
-                if (!api.loginUser(login, password)) {
+                if (api.loginUser(login, password)) {
+                    view.moveToNextScreen()
+                } else {
                     view.showApiError()
                 }
             }
