@@ -105,7 +105,7 @@ class LoginControllerTest {
     }
 
     @Test
-    fun `should save auth credentials on successful login`() {
+    fun `should save token on successful login`() {
         login()
         loginSubject.onSuccess("token")
         verify(authStorage).saveCredentials("token")
