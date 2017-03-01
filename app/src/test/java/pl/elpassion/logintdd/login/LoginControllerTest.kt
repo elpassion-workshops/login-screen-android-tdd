@@ -2,6 +2,8 @@ package pl.elpassion.logintdd.login
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Observable
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito.verify
@@ -72,6 +74,7 @@ class LoginControllerTest {
 
     @Test
     fun `should show credentials error when validation fails`() {
+        whenever(validator.validate()).thenReturn(Observable.just(Unit))
         login()
         verify(view).showCredentialsError()
     }
@@ -90,7 +93,7 @@ interface Login {
     }
 
     interface Validator {
-        fun validate()
+        fun validate() : Observable<Unit>
     }
 }
 
