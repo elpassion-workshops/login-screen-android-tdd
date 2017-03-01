@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
 
     override fun showLoginFailed() = loginError.show()
 
-    override fun showLoader() {}
+    override fun showLoader() = loader.show()
 
     override fun hideLoader() {}
 }

@@ -104,6 +104,11 @@ class LoginActivityTest {
         onId(R.id.loader).isDisplayed()
     }
 
+    @Test
+    fun shouldNotShowLoaderOnStart() {
+        onId(R.id.loader).isNotDisplayed()
+    }
+
     private fun mockApiSuccess() = userSubject.onSuccess(User(4))
 
     private fun mockApiError() = userSubject.onError(RuntimeException())
