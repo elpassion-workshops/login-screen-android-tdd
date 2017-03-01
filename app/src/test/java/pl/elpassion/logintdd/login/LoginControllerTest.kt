@@ -53,6 +53,12 @@ class LoginControllerTest {
         verify(api, never()).loginUser(any(), any())
     }
 
+    @Test
+    fun shouldReallyCallApiWhenCredentialsAreCorrect() {
+        login("password_3", "password_3")
+        verify(api).loginUser("password_3", "password_3")
+    }
+
 
     private fun login(login: String = "login", password: String = "password") {
         LoginController(view, api).login(login = login, password = password)
@@ -75,7 +81,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
         when {
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
-            else -> api.loginUser("login1", "password1")
+            else -> api.loginUser(login, password)
         }
     }
 }
