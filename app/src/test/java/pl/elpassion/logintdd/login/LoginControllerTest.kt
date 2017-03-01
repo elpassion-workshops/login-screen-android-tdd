@@ -2,6 +2,10 @@ package pl.elpassion.logintdd.login
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Single
+import io.reactivex.subjects.SingleSubject
+import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.verify
 
@@ -9,6 +13,12 @@ class LoginControllerTest {
 
     private val view = mock<Login.View>()
     private val api = mock<Login.Api>()
+    private val singleSubject = SingleSubject.create<Unit>()
+
+    @Before
+    fun setUp() {
+        whenever(api.performCall()).thenReturn(singleSubject)
+    }
 
     @Test
     fun shouldShowEmptyLoginError() {
@@ -73,7 +83,15 @@ class LoginControllerTest {
     @Test
     fun shouldHideLoaderAfterApiCall() {
         login()
+        singleSubject.onSuccess(Unit)
         verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldNotHideLoaderIfApiCallIsNotFinished() {
+        login()
+        whenever(api.performCall()).thenReturn(Single.never())
+        verify(view, never()).hideLoader()
     }
 
     private fun login(login: String = "myLogin", password: String = "password") {
@@ -90,7 +108,7 @@ interface Login {
     }
 
     interface Api {
-        fun performCall()
+        fun performCall(): Single<Unit>
     }
 }
 
@@ -102,7 +120,9 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
             else -> {
                 view.showLoader()
                 api.performCall()
-                view.hideLoader()
+                        .subscribe { unit ->
+                            view.hideLoader()
+                        }
             }
         }
     }
