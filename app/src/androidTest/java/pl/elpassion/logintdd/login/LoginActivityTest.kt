@@ -80,19 +80,21 @@ class LoginActivityTest {
 
 	@Test
 	fun shouldOpenNextScreenAfterSuccessfulLogin() {
-		onId(R.id.loginInput).typeText("login")
-		onId(R.id.passwordInput).typeText("password")
+		performLogin()
 		apiSubject.onSuccess(User(1))
-		onText(R.string.loginButtonText).click()
 		checkIntent(MainActivity::class.java)
 	}
 
 	@Test
 	fun shouldDisplayMessageOnApiError() {
+		performLogin()
+		apiSubject.onError(Throwable())
+		onText(R.string.apiError).isDisplayed()
+	}
+
+	private fun performLogin() {
 		onId(R.id.loginInput).typeText("login")
 		onId(R.id.passwordInput).typeText("password")
-		apiSubject.onError(Throwable())
 		onText(R.string.loginButtonText).click()
-		onText(R.string.apiError).isDisplayed()
 	}
 }
