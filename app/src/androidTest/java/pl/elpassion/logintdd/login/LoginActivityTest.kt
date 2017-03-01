@@ -57,4 +57,11 @@ class LoginActivityTest {
     fun shouldNotShowErrorOnIdleState() {
         onId(R.id.login_empty_error).isNotDisplayed()
     }
+
+    @Test
+    fun shouldNotShowErrorWhenLoginNotEmpty() {
+        onId(R.id.loginInput).typeText("login")
+        onId(R.id.button_login).click()
+        onId(R.id.login_empty_error).isNotDisplayed()
+    }
 }
