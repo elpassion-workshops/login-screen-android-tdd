@@ -10,19 +10,19 @@ class LoginControllerTest {
     private val view = mock<Login.View>()
 
     @Test
-    fun shouldShowErrorWhenLoginIsEmpty() {
+    fun shouldShowEmptyLoginError() {
         login(login = "")
         verify(view).showLoginEmptyError()
     }
 
     @Test
-    fun shouldNotShowErrorWhenLoginIsNotEmpty() {
+    fun shouldNotShowEmptyLoginError() {
         login(login = "myLogin")
         verify(view, never()).showLoginEmptyError()
     }
 
     @Test
-    fun shouldShowErrorWhenPasswordIsEmpty() {
+    fun shouldShowEmptyPasswordError() {
         login(password = "")
         verify(view).showPasswordEmptyError()
     }
