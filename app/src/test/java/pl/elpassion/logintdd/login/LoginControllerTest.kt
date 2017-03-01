@@ -23,17 +23,17 @@ class LoginControllerTest {
 
     @Test
     fun shouldShowErrorWhenPasswordIsEmpty() {
-        login(login = "myLogin", password = "")
+        login(password = "")
         verify(view).showPasswordEmptyError()
     }
 
     @Test
     fun shouldNotShowErrorWhenPasswordIsNotEmpty() {
-        login(login = "myLogin", password = "myPassword")
+        login(password = "myPassword")
         verify(view, never()).showPasswordEmptyError()
     }
 
-    private fun login(login: String, password: String = "") {
+    private fun login(login: String= "myLogin", password: String = "myPassword") {
         LoginController(view).login(login = login, password = password)
     }
 }
