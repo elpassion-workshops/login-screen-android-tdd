@@ -58,6 +58,12 @@ class LoginControllerTest {
         verify(view).showProgress()
     }
 
+    @Test
+    fun shouldNotShowProgressWhenNoApiCall() {
+        login(login = "", password = "")
+        verify(view, never()).showProgress()
+    }
+
     private fun login(login: String = "login", password: String = "MargaretTatcherIs100%Sexy") {
         LoginController(view, apiManager).login(login = login, password = password)
     }
@@ -81,9 +87,11 @@ class LoginController(private val view: Login.View,
         when {
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
-            else -> apiManager.login()
+            else -> {
+                apiManager.login()
+                view.showProgress()
+            }
         }
 
-        view.showProgress()
     }
 }
