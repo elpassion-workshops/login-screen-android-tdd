@@ -13,7 +13,7 @@ class LoginActivityTest {
 
     @Test
     fun shouldHaveLoginInputHeader() {
-        onText("Login").isDisplayed()
+        onId(R.id.loginHeader).hasText("Login").isDisplayed()
     }
 
     @Test
@@ -33,6 +33,7 @@ class LoginActivityTest {
 
     @Test
     fun shouldHaveLoginButton() {
-        onId(R.id.loginButton).isDisplayed()
+        onId(R.id.loginButton).isDisplayed().hasText("Login")
     }
+
 }
