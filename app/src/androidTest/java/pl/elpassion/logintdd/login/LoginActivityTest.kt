@@ -41,6 +41,10 @@ class LoginActivityTest {
         onId(R.id.passwordInput).isSecure()
     }
 
+    @Test
+    fun shouldHaveLoginButton() {
+        onId(R.id.loginButton).isDisplayed()
+    }
 }
 
 private fun ViewInteraction.isSecure() {
