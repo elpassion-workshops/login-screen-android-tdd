@@ -71,6 +71,12 @@ class LoginControllerTest {
 		verify(view).showLoader()
 	}
 
+	@Test
+	fun shouldHideLoaderWhenApiCallFinished() {
+		login()
+		verify(view).hideLoader()
+	}
+
 	private fun login(login: String = "login", password: String = "password") {
 		LoginController(view, api, database).login(login = login, password = password)
 	}
@@ -81,6 +87,7 @@ interface Login {
 		fun showLoginEmptyError()
 		fun showPasswordEmptyError()
 		fun showLoader()
+		fun hideLoader()
 	}
 
 	interface Api {
@@ -104,5 +111,6 @@ class LoginController(private val view: Login.View, private val api: Login.Api, 
 			}
 		}
 		database.saveAccessToken()
+		view.hideLoader()
 	}
 }
