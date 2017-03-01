@@ -11,10 +11,7 @@ import pl.elpassion.logintdd.R
 
 class LoginActivity : AppCompatActivity(), Login.View {
     val loginController = LoginController(
-            api = object : Login.Api {
-                override fun login(login: String, password: String): Single<User> = Single.just(User(1))
-
-            },
+            api = Login.ApiProvider.get(),
             view = this,
             userRepository = object : Login.UserRepository {
                 override fun saveUser(user: User) = Unit
@@ -43,6 +40,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun showLoginFailed() {
+        loginError.show()
     }
 
     override fun showLoader() {
