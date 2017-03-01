@@ -5,9 +5,9 @@
               android:orientation="vertical">
 
     <TextView
-        android:labelFor="@+id/loginInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:labelFor="@+id/loginInput"
         android:text="@string/login_label"/>
 
     <EditText
@@ -17,9 +17,9 @@
         android:inputType="text"/>
 
     <TextView
-        android:labelFor="@+id/passwordInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:labelFor="@+id/passwordInput"
         android:text="@string/password_label"/>
 
     <EditText

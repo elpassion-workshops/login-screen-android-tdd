@@ -2,5 +2,5 @@
     <string name="app_name">LoginTdd</string>
     <string name="login_label">Login</string>
     <string name="password_label">Password</string>
-    <string name="login_button_text">login</string>
+    <string name="login_button_text">Sign In</string>
 </resources>
