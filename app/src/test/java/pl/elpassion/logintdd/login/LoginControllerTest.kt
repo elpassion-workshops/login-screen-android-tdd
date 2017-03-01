@@ -91,6 +91,13 @@ class LoginControllerTest {
         verify(view, never()).showCredentialsError()
     }
 
+    @Test
+    fun `should hide progress bar when validation ends`() {
+        login()
+        verify(view).hideProgressBar()
+
+    }
+
     private fun mockValidator(returnValue: Observable<Unit> = Observable.just(Unit)) {
         whenever(validator.validate()).thenReturn(returnValue)
     }
@@ -106,6 +113,7 @@ interface Login {
         fun showPasswordEmptyError()
         fun showProgressBar()
         fun showCredentialsError()
+        fun hideProgressBar()
     }
 
     interface Validator {
@@ -125,9 +133,11 @@ class LoginController(private val view: Login.View, private val validator: Login
                         .subscribe(
                                 {
                                     _ ->
+                                    view.hideProgressBar()
                                 },
                                 {
-                                    _ -> view.showCredentialsError()
+                                    _ ->
+                                    view.showCredentialsError()
                                 })
             }
         }
