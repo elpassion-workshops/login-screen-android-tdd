@@ -43,7 +43,7 @@ class LoginControllerTest {
     @Test
     fun shouldNotPerformApiCallIfLoginEmpty() {
         login(login = "")
-        verify(api, never()).performApiCall()
+        verify(api, never()).performCall()
     }
 
     private fun login(login: String = "myLogin", password: String = "password") {
@@ -59,7 +59,7 @@ interface Login {
     }
 
     interface Api {
-        fun performApiCall()
+        fun performCall()
     }
 }
 
