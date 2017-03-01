@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:labelFor="@+id/loginInput"
-        android:text="@string/login_label"/>
+        android:text="@string/loginLabel"/>
 
     <EditText
         android:id="@+id/loginInput"
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:labelFor="@+id/passwordInput"
-        android:text="@string/password_label"/>
+        android:text="@string/passwordLabel"/>
 
     <EditText
         android:id="@+id/passwordInput"
@@ -32,10 +32,10 @@
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login_button_text"/>
+        android:text="@string/loginButtonText"/>
 
     <ProgressBar
-        android:id="@+id/progress_bar"
+        android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="invisible"/>

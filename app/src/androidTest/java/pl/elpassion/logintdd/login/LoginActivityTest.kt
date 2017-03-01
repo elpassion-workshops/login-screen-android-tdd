@@ -19,7 +19,7 @@ class LoginActivityTest {
 
     @Test
     fun shouldHaveLoginInputHeader() {
-        onText(R.string.login_label).isDisplayed()
+        onText(R.string.loginLabel).isDisplayed()
     }
 
     @Test
@@ -34,7 +34,7 @@ class LoginActivityTest {
 
     @Test
     fun shouldHavePasswordInputHeader() {
-        onText(R.string.password_label).isDisplayed()
+        onText(R.string.passwordLabel).isDisplayed()
     }
 
     @Test
@@ -45,11 +45,11 @@ class LoginActivityTest {
 
     @Test
     fun shouldHaveLoginButton() {
-        onText(R.string.login_button_text).isDisplayed()
+        onText(R.string.loginButtonText).isDisplayed()
     }
 
     @Test
     fun shouldNotHaveVisibleLoaderInitially() {
-        onId(R.id.progress_bar).isNotDisplayed()
+        onId(R.id.progressBar).isNotDisplayed()
     }
 }
