@@ -55,4 +55,11 @@ class LoginActivityTest {
         onId(R.id.loginButton).click()
         onId(R.id.errorMessage).isDisplayed()
     }
+
+    @Test
+    fun shouldShowErrorWhenEmptyPassword() {
+        onId(R.id.loginInput).typeText("login")
+        onId(R.id.loginButton).click()
+        onId(R.id.emptyPasswordError).isDisplayed()
+    }
 }
