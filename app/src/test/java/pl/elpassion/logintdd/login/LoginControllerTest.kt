@@ -67,6 +67,13 @@ class LoginControllerTest {
         verify(view).showApiError()
     }
 
+    @Test
+    fun shouldNotShowApiErrorWhenLoginNotFails() {
+        whenever(api.loginUser(any(), any())).thenReturn(true)
+        login("testLogin", "testLogin")
+        verify(view, never()).showApiError()
+    }
+
     private fun login(login: String = "login", password: String = "password") {
         LoginController(view, api).login(login = login, password = password)
     }
@@ -90,9 +97,9 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
             else -> {
-                api.loginUser(login, password)
-                view.showApiError()
-
+                if (!api.loginUser(login, password)) {
+                    view.showApiError()
+                }
             }
         }
     }
