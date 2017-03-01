@@ -106,6 +106,13 @@ class LoginControllerTest {
 		verify(view).hideLoader()
 	}
 
+	@Test
+	fun shouldShowErrorMessageOnApiCallError() {
+		login()
+		apiSubject.onError(Throwable())
+		verify(view).showApiError()
+	}
+
 	private fun login(login: String = "login", password: String = "password") {
 		LoginController(view, api, database).login(login = login, password = password)
 	}
@@ -117,6 +124,7 @@ interface Login {
 		fun showPasswordEmptyError()
 		fun showLoader()
 		fun hideLoader()
+		fun showApiError()
 	}
 
 	interface Api {
@@ -138,7 +146,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api, 
 				view.showLoader()
 				api.login()
 						.doFinally { view.hideLoader() }
-						.subscribe({ database.saveAccessToken(it) }, { })
+						.subscribe({ database.saveAccessToken(it) }, { view.showApiError() })
 			}
 		}
 	}
