@@ -8,6 +8,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.SingleSubject
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.logintdd.MainActivity
 import pl.elpassion.logintdd.R
 import pl.elpassion.logintdd.common.Animations
 
@@ -24,6 +25,9 @@ class LoginActivityTest {
             Login.UserRepositoryProvider.override = mock()
         }
     }
+
+    @JvmField @Rule
+    val intentsRule = InitIntentsRule()
 
     @Test
     fun shouldHaveLoginInputHeader() {
@@ -73,5 +77,12 @@ class LoginActivityTest {
         onId(R.id.loginButton).click()
         loginSubject.onError(Throwable())
         onId(R.id.textApiError).isDisplayed().hasText(R.string.api_error_text)
+    }
+
+    @Test
+    fun shouldGoToNextScreenAfterOnSuccess() {
+        onId(R.id.loginButton).click()
+        loginSubject.onSuccess(User(1))
+        checkIntent(MainActivity::class.java)
     }
 }
