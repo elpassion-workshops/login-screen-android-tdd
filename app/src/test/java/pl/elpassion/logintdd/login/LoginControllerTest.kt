@@ -74,7 +74,7 @@ class LoginControllerTest {
 
     @Test
     fun `should show credentials error when validation fails`() {
-        whenever(validator.validate()).thenReturn(Observable.just(Unit))
+        whenever(validator.validate()).thenReturn(Observable.error(RuntimeException()))
         login()
         verify(view).showCredentialsError()
     }
