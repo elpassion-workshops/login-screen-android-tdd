@@ -59,6 +59,12 @@ class LoginControllerTest {
         login(login = "myLogin", password = "myPassword")
         verify(api).login(login = "myLogin", password = "myPassword")
     }
+    
+    @Test
+    fun `should call login API with entered login and password (case 2)`() {
+        login(login = "login", password = "password")
+        verify(api).login(login = "login", password = "password")
+    }
 
     private fun login(login: String = "login", password: String = "password") {
         LoginController(view, api).login(login = login, password = password)
@@ -85,7 +91,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
             }
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
-            else -> api.login("myLogin", "myPassword")
+            else -> api.login(login, password)
         }
     }
 }
