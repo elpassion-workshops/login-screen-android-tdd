@@ -33,7 +33,6 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun showLoginFailed() {
-        //no-op
     }
 
     override fun showLoader() {

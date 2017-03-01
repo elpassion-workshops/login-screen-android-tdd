@@ -68,4 +68,10 @@ class LoginActivityTest {
         onId(R.id.loader).isNotDisplayed()
     }
 
+    @Test
+    fun shouldShowErrorTextWhenApiError() {
+        onId(R.id.loginButton).click()
+        loginSubject.onError(Throwable())
+        onId(R.id.textApiError).isDisplayed().hasText(R.string.api_error_text)
+    }
 }

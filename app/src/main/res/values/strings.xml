@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LoginTdd</string>
+    <string name="api_error_text">Something went wrong with server!</string>
 </resources>
