@@ -110,7 +110,15 @@ class LoginControllerTest {
     @Test
     fun `should save authentication token when validation passes`() {
         login()
+        loginSubject.onSuccess(Unit)
         verify(apiTokenStore).saveToken()
+    }
+
+    @Test
+    fun `should not save authentiaction token when validation fails`() {
+        login()
+        loginSubject.onError(RuntimeException())
+        verify(apiTokenStore, never()).saveToken()
     }
 
     private fun login(login: String = "myLogin", password: String = "myPassword") {
@@ -146,11 +154,13 @@ class LoginController(private val view: Login.View, private val validator: Login
                 validator
                         .validate()
                         .doOnError { view.showCredentialsError() }
-                        .doOnSuccess { view.hideProgressBar() }
+                        .doOnSuccess {
+                            view.hideProgressBar()
+                            apiTokenStore.saveToken()
+                        }
                         .subscribe({}, {})
             }
         }
 
-        apiTokenStore.saveToken()
     }
 }
