@@ -11,6 +11,7 @@ import org.mockito.Matchers
 import org.mockito.Matchers.*
 import org.mockito.Mockito.any
 import org.mockito.Mockito.verify
+import java.util.*
 
 class LoginControllerTest {
 
@@ -75,19 +76,11 @@ class LoginControllerTest {
 	@Test
 	fun shouldPersistAccessTokenOnSuccessfulLogin() {
 		login()
+		val accessToken = UUID.randomUUID().toString()
 
-		apiSubject.onSuccess("accessToken")
+		apiSubject.onSuccess(accessToken)
 
-		verify(database).saveAccessToken("accessToken")
-	}
-
-	@Test
-	fun shouldPersistSameAccessTokenOnSuccessfulLogin() {
-		login()
-
-		apiSubject.onSuccess("tokenAccess")
-
-		verify(database).saveAccessToken("tokenAccess")
+		verify(database).saveAccessToken(accessToken)
 	}
 
 	@Test
