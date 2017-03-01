@@ -115,7 +115,7 @@ class LoginControllerTest {
     }
 
     @Test
-    fun `should not save authentiaction token when validation fails`() {
+    fun `should not save authentication token when validation fails`() {
         login()
         loginSubject.onError(RuntimeException())
         verify(apiTokenStore, never()).saveToken()
@@ -149,18 +149,20 @@ class LoginController(private val view: Login.View, private val validator: Login
         when {
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
-            else -> {
-                view.showProgressBar()
-                validator
-                        .validate()
-                        .doOnError { view.showCredentialsError() }
-                        .doOnSuccess {
-                            view.hideProgressBar()
-                            apiTokenStore.saveToken()
-                        }
-                        .subscribe({}, {})
-            }
+            else -> makeApiCall()
         }
 
+    }
+
+    private fun makeApiCall() {
+        view.showProgressBar()
+        validator
+                .validate()
+                .doOnError { view.showCredentialsError() }
+                .doOnSuccess {
+                    view.hideProgressBar()
+                    apiTokenStore.saveToken()
+                }
+                .subscribe({}, {})
     }
 }
