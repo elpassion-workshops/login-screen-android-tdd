@@ -111,6 +111,13 @@ class LoginControllerTest {
         verify(authStorage).saveCredentials("token")
     }
 
+    @Test
+    fun `should save token on successful login (case 2)`() {
+        login()
+        loginSubject.onSuccess("token2")
+        verify(authStorage).saveCredentials("token2")
+    }
+
     private fun login(login: String = "login", password: String = "password") {
         LoginController(view, api, authStorage).login(login = login, password = password)
     }
@@ -153,7 +160,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api, 
                 .login(login, password)
                 .doOnSubscribe { view.showLoader() }
                 .doOnSuccess { token ->
-                    authStorage.saveCredentials("token")
+                    authStorage.saveCredentials(token)
                     view.openNextScreen()
                 }
                 .doOnError {
