@@ -31,6 +31,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
 
     override fun showEmptyLoginError() {
         error.visibility = View.VISIBLE
+        error.text = getText(R.string.login_error)
     }
 
     override fun showEmptyPasswordError() {
