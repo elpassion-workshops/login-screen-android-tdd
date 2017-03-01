@@ -3,8 +3,8 @@ package pl.elpassion.logintdd.login
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.Single
+import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.verify
@@ -13,7 +13,7 @@ class LoginControllerTest {
 
     private val view = mock<Login.View>()
     private val apiManager = mock<Login.Api>()
-    private val publishSubject = PublishSubject.create<Unit>()
+    private val publishSubject = SingleSubject.create<Unit>()
 
     @Before
     fun setUp() {
@@ -77,7 +77,7 @@ class LoginControllerTest {
     @Test
     fun shouldHideProgressWhenApiCallEnded() {
         login()
-        publishSubject.onNext(Unit)
+        publishSubject.onSuccess(Unit)
         verify(view).hideProgress()
     }
 
@@ -108,7 +108,7 @@ interface Login {
     }
 
     interface Api {
-        fun login(): Observable<Unit>
+        fun login(): Single<Unit>
     }
 }
 
