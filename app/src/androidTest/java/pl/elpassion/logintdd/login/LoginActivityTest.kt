@@ -46,4 +46,9 @@ class LoginActivityTest {
         onId(R.id.loginButton).click()
         onId(R.id.loader).isDisplayed()
     }
+
+    @Test
+    fun shouldNotShowProgressBarWhenNotClicked() {
+        onId(R.id.loader).isNotDisplayed()
+    }
 }

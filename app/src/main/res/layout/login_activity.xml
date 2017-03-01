@@ -33,6 +33,7 @@
 
     <pl.elpassion.logintdd.common.MyProgressBar
         android:id="@+id/loader"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </LinearLayout>
