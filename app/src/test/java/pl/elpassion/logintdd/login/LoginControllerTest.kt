@@ -99,8 +99,8 @@ class LoginController(private val view: Login.View, private val api: Login.Api, 
 			login.isEmpty() -> view.showLoginEmptyError()
 			password.isEmpty() -> view.showPasswordEmptyError()
 			else -> {
-				api.login()
 				view.showLoader()
+				api.login()
 			}
 		}
 		database.saveAccessToken()
