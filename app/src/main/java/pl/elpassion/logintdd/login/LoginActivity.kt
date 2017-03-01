@@ -1,5 +1,6 @@
 package pl.elpassion.logintdd.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.elpassion.android.view.show
@@ -8,6 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.logintdd.R
+import pl.elpassion.logintdd.SumOtherActivity
 
 class LoginActivity : AppCompatActivity(), Login.View {
     val loginController = LoginController(
@@ -37,6 +39,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun openNextScreen() {
+        startActivity(Intent(this, SumOtherActivity::class.java))
     }
 
     override fun showLoginFailed() {
@@ -48,6 +51,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun hideLoader() {
+
     }
 
 }

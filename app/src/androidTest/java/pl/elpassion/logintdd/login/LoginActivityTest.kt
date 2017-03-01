@@ -1,8 +1,7 @@
 package pl.elpassion.logintdd.login
 
 import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.matcher.ViewMatchers
-import android.support.test.espresso.matcher.ViewMatchers.*
+import android.support.test.espresso.matcher.ViewMatchers.withInputType
 import android.support.test.rule.ActivityTestRule
 import android.text.InputType
 import com.elpassion.android.commons.espresso.*
@@ -13,20 +12,23 @@ import io.reactivex.subjects.SingleSubject
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.logintdd.R
-import javax.security.auth.Subject
+import pl.elpassion.logintdd.SumOtherActivity
 
 class LoginActivityTest {
 
     private val loginSubject = SingleSubject.create<User>()
 
     @JvmField @Rule
-    val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java){
+    val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java) {
         override fun beforeActivityLaunched() {
             Login.ApiProvider.override = mock<Login.Api>().apply {
                 whenever(login(any(), any())).thenReturn(loginSubject)
             }
         }
     }
+
+    @JvmField @Rule
+    val intents = InitIntentsRule()
 
     @Test
     fun shouldHaveLoginInputHeader() {
@@ -98,9 +100,17 @@ class LoginActivityTest {
         onId(R.id.loginError).isDisplayed()
     }
 
+    @Test
+    fun shouldLaunchNewActivityWhenApbCallSucceeds() {
+        logIn()
+        loginSubject.onSuccess(User(1))
+        checkIntent(SumOtherActivity::class.java)
+    }
+
     private fun logIn(login: String = "login", password: String = "password") {
         onId(R.id.loginInput).typeText(login)
         onId(R.id.passwordInput).typeText(password)
         onId(R.id.loginButton).click()
     }
 }
+
