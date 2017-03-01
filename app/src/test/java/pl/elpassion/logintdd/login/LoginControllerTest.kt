@@ -7,12 +7,6 @@ import org.mockito.Mockito.verify
 class LoginControllerTest {
 
     @Test
-    fun shouldHaveLoginController() {
-        val view = mock<Login.View>()
-        LoginController(view)
-    }
-
-    @Test
     fun shouldShowErrorWhenLoginIsEmpty() {
         val view = mock<Login.View>()
         LoginController(view).login(login = "")
