@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.verify
@@ -12,10 +13,11 @@ class LoginControllerTest {
     private val view = mock<Login.View>()
     private val validator = mock<Login.Validator>()
     private val apiTokenStore = mock<Login.ApiTokenStore>()
+    private val loginSubject = PublishSubject.create<Unit>()
 
     @Before
     fun setUp() {
-        mockValidator()
+        whenever(validator.validate()).thenReturn(loginSubject)
     }
 
     @Test
@@ -80,27 +82,27 @@ class LoginControllerTest {
 
     @Test
     fun `should show credentials error when validation fails`() {
-        mockValidator(Observable.error(RuntimeException()))
         login()
+        loginSubject.onError(RuntimeException())
         verify(view).showCredentialsError()
     }
 
     @Test
     fun `should not show credentials error when validation passes`() {
-        mockValidator(Observable.just(Unit))
         login()
+        loginSubject.onNext(Unit)
         verify(view, never()).showCredentialsError()
     }
 
     @Test
     fun `should hide progress bar when validation passes`() {
         login()
+        loginSubject.onComplete()
         verify(view).hideProgressBar()
     }
 
     @Test
     fun `should not hide progress bar until validation passes`() {
-        mockValidator(Observable.never())
         login()
         verify(view, never()).hideProgressBar()
     }
