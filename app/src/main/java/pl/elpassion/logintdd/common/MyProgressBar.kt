@@ -1,6 +1,8 @@
 package pl.elpassion.logintdd.common
 
+import android.annotation.TargetApi
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.ProgressBar
@@ -13,6 +15,7 @@ class MyProgressBar : FrameLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {}
 
     init {

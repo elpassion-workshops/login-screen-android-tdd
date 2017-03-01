@@ -43,6 +43,7 @@ class LoginActivityTest {
 
     @Test
     fun shouldShowLoaderOnLoginClicked() {
+        onId(R.id.loginButton).click()
         onId(R.id.loader).isDisplayed()
     }
 }
