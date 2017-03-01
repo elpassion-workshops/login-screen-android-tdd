@@ -44,4 +44,15 @@ class LoginActivityTest {
     fun shouldHaveLoginButton() {
         onId(R.id.loginButton).isDisplayed()
     }
+
+    @Test
+    fun shouldHaveHiddenErrorMessage() {
+        onId(R.id.errorMessage).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldShowErrorMessageWhenEmptyLogin() {
+        onId(R.id.loginButton).click()
+        onId(R.id.errorMessage).isDisplayed()
+    }
 }
