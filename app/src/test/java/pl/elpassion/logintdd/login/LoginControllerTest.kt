@@ -17,7 +17,7 @@ class LoginControllerTest {
 	private val view = mock<Login.View>()
 	private val api = mock<Login.Api>()
 	private val database = mock<Login.Database>()
-	private val apiSubject = SingleSubject.create<Unit>()
+	private val apiSubject = SingleSubject.create<String>()
 
 	@Before
 	fun setUp() {
@@ -76,9 +76,18 @@ class LoginControllerTest {
 	fun shouldPersistAccessTokenOnSuccessfulLogin() {
 		login()
 
-		apiSubject.onSuccess(Unit)
+		apiSubject.onSuccess("accessToken")
 
 		verify(database).saveAccessToken("accessToken")
+	}
+
+	@Test
+	fun shouldPersistSameAccessTokenOnSuccessfulLogin() {
+		login()
+
+		apiSubject.onSuccess("tokenAccess")
+
+		verify(database).saveAccessToken("tokenAccess")
 	}
 
 	@Test
@@ -90,7 +99,7 @@ class LoginControllerTest {
 	@Test
 	fun shouldHideLoaderWhenApiCallFinished() {
 		login()
-		apiSubject.onSuccess(Unit)
+		apiSubject.onSuccess("tokenAccess")
 		verify(view).hideLoader()
 	}
 
@@ -114,7 +123,7 @@ interface Login {
 	}
 
 	interface Api {
-		fun login(): Single<Unit>
+		fun login(): Single<String>
 	}
 
 	interface Database {
@@ -132,7 +141,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api, 
 				view.showLoader()
 				api.login().subscribe({
 					view.hideLoader()
-					database.saveAccessToken("accessToken")
+					database.saveAccessToken(it)
 				}, {})
 			}
 		}
