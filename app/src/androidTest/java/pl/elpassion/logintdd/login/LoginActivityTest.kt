@@ -8,6 +8,7 @@ import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import com.elpassion.android.commons.espresso.*
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.logintdd.MainActivity
 import pl.elpassion.logintdd.R
 
 class LoginActivityTest {
@@ -16,6 +17,8 @@ class LoginActivityTest {
 
     @JvmField @Rule
     val rule = ActivityTestRule<LoginActivity>(LoginActivity::class.java)
+    @JvmField @Rule
+    val intentsRule = InitIntentsRule()
 
     @Test
     fun shouldHaveLoginInputHeader() {
@@ -62,5 +65,13 @@ class LoginActivityTest {
     @Test
     fun shouldNotShowEmptyLoginErrorInitially() {
         onText(R.string.emptyLogin).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldOpenNextScreenAfterSuccessfulLogin() {
+        onId(R.id.loginInput).typeText("login")
+        onId(R.id.passwordInput).typeText("password")
+        onText(R.string.loginButtonText).click()
+        checkIntent(MainActivity::class.java)
     }
 }

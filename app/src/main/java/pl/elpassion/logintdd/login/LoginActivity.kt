@@ -1,5 +1,6 @@
 package pl.elpassion.logintdd.login
 
+import android.content.Intent
 import android.os.Bundle
 
 import android.support.v7.app.AppCompatActivity
@@ -9,12 +10,13 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.login_activity.*
+import pl.elpassion.logintdd.MainActivity
 import pl.elpassion.logintdd.R
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
 	val loginController = LoginController(object : Login.Api {
-		override fun login(login: String, password: String) = Single.never<User>()
+		override fun login(login: String, password: String) = Single.just<User>(User(1))
 
 	}, this, object : Login.UserRepository {
 		override fun saveUser(user: User) = Unit
@@ -29,7 +31,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
 	}
 
 	override fun openNextScreen() {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		startActivity(Intent(this, MainActivity::class.java))
 	}
 
 	override fun showLoginFailed() {
@@ -37,11 +39,11 @@ class LoginActivity : AppCompatActivity(), Login.View {
 	}
 
 	override fun showLoader() {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
 	}
 
 	override fun hideLoader() {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
