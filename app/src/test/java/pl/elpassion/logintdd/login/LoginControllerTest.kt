@@ -3,6 +3,7 @@ package pl.elpassion.logintdd.login
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
 import org.mockito.Mockito.verify
 
@@ -59,6 +60,12 @@ class LoginControllerTest {
         verify(api).loginUser("password_3", "password_3")
     }
 
+    @Test
+    fun shouldShowApiErrorWhenLoginFails() {
+        whenever(api.loginUser(any(), any())).thenReturn(false)
+        login("testLogin", "testPassword")
+        verify(view).showApiError()
+    }
 
     private fun login(login: String = "login", password: String = "password") {
         LoginController(view, api).login(login = login, password = password)
@@ -69,10 +76,11 @@ interface Login {
     interface View {
         fun showLoginEmptyError()
         fun showPasswordEmptyError()
+        fun showApiError()
     }
 
     interface Api {
-        fun loginUser(login: String, password: String)
+        fun loginUser(login: String, password: String): Boolean
     }
 }
 
@@ -81,7 +89,11 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
         when {
             login.isEmpty() -> view.showLoginEmptyError()
             password.isEmpty() -> view.showPasswordEmptyError()
-            else -> api.loginUser(login, password)
+            else -> {
+                api.loginUser(login, password)
+                view.showApiError()
+
+            }
         }
     }
 }
