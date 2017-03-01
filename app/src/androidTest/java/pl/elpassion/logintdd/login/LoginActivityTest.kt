@@ -83,11 +83,19 @@ class LoginActivityTest {
 
     @Test
     fun shouldShowLoginErrorOnLoginError() {
+        login()
+        mockApiError()
+        onId(R.id.loginError).isDisplayed().hasText("Login error")
+    }
+
+    private fun mockApiError() {
+        userSubject.onError(RuntimeException())
+    }
+
+    private fun login() {
         onId(R.id.loginInput).typeText("login")
         onId(R.id.passwordInput).typeText("password")
         onId(R.id.loginButton).click()
-        userSubject.onError(RuntimeException())
-        onId(R.id.loginError).isDisplayed().hasText("Login error")
     }
 }
 
