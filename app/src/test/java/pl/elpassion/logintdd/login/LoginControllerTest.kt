@@ -2,6 +2,7 @@ package pl.elpassion.logintdd.login
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
+import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito.verify
 
@@ -69,6 +70,12 @@ class LoginControllerTest {
         verify(validator, never()).validate()
     }
 
+    @Test
+    fun `should show credentials error when validation fails`() {
+        login()
+        verify(view).showCredentialsError()
+    }
+
     private fun login(login: String = "myLogin", password: String = "myPassword") {
         LoginController(view, validator).login(login = login, password = password)
     }
@@ -79,6 +86,7 @@ interface Login {
         fun showLoginEmptyError()
         fun showPasswordEmptyError()
         fun showProgressBar()
+        fun showCredentialsError()
     }
 
     interface Validator {
@@ -96,5 +104,7 @@ class LoginController(private val view: Login.View, private val validator: Login
                 validator.validate()
             }
         }
+
+        view.showCredentialsError()
     }
 }
