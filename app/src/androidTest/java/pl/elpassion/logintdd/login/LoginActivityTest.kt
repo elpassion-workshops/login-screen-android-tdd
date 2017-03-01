@@ -1,6 +1,9 @@
 package pl.elpassion.logintdd.login
 
+import android.support.test.espresso.assertion.ViewAssertions
+import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.rule.ActivityTestRule
+import android.text.InputType
 import com.elpassion.android.commons.espresso.*
 import org.junit.Rule
 import org.junit.Test
@@ -29,6 +32,11 @@ class LoginActivityTest {
     @Test
     fun shouldHavePasswordInput() {
         onId(R.id.passwordInput).typeText("password").hasText("password")
+    }
+
+    @Test
+    fun shouldPasswordInputBeSecure() {
+        onId(R.id.passwordInput).check(ViewAssertions.matches(ViewMatchers.withInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT)))
     }
 
 }
