@@ -90,6 +90,12 @@ class LoginControllerTest {
         verify(view).showLoginError()
     }
     
+    @Test
+    fun `should show loader while performing login API call`() {
+        login()
+        verify(view).showLoader()
+    }
+    
     private fun login(login: String = "login", password: String = "password") {
         LoginController(view, api).login(login = login, password = password)
     }
@@ -101,6 +107,7 @@ interface Login {
         fun showPasswordEmptyError()
         fun openNextScreen()
         fun showLoginError()
+        fun showLoader()
     }
 
     interface Api {
@@ -122,6 +129,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
     }
 
     private fun performApiLogin(login: String, password: String) {
+        view.showLoader()
         api
                 .login(login, password)
                 .doOnSuccess { view.openNextScreen() }
