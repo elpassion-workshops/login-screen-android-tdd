@@ -4,4 +4,5 @@
     <string name="passwordLabel">Password</string>
     <string name="loginButtonText">Sign In</string>
     <string name="emptyLogin">Login is empty</string>
+    <string name="apiError">API fail</string>
 </resources>

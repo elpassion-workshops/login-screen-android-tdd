@@ -18,11 +18,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
 		override fun saveUser(user: User) = Unit
 	}
 
-	private val api = object : Login.Api {
-		override fun login(login: String, password: String) = Single.just(User(1))
-	}
-
-	val loginController = LoginController(api, this, userRepository, Schedulers.io(), AndroidSchedulers.mainThread())
+	val loginController = LoginController(Login.ApiProvider.get(), this, userRepository, Schedulers.io(), AndroidSchedulers.mainThread())
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -37,7 +33,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
 
 	override fun openNextScreen() = startActivity(Intent(this, MainActivity::class.java))
 
-	override fun showLoginFailed() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+	override fun showLoginFailed() = apiErrorTextView.show()
 
 	override fun showLoader() = Unit
 
