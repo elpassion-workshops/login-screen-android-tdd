@@ -2,10 +2,9 @@ package pl.elpassion.logintdd.login
 
 import android.content.Intent
 import android.os.Bundle
-
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.widget.TextView
+import com.elpassion.android.view.show
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -15,36 +14,15 @@ import pl.elpassion.logintdd.R
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
-	val loginController = LoginController(object : Login.Api {
-		override fun login(login: String, password: String) = Single.just<User>(User(1))
-
-	}, this, object : Login.UserRepository {
+	private val userRepository = object : Login.UserRepository {
 		override fun saveUser(user: User) = Unit
-	}, Schedulers.io(), AndroidSchedulers.mainThread())
-
-	override fun showEmptyLoginError() {
-		emptyLoginErrorTextView.visibility = View.VISIBLE
 	}
 
-	override fun showEmptyPasswordError() {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+	private val api = object : Login.Api {
+		override fun login(login: String, password: String) = Single.just(User(1))
 	}
 
-	override fun openNextScreen() {
-		startActivity(Intent(this, MainActivity::class.java))
-	}
-
-	override fun showLoginFailed() {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-	}
-
-	override fun showLoader() {
-
-	}
-
-	override fun hideLoader() {
-
-	}
+	val loginController = LoginController(api, this, userRepository, Schedulers.io(), AndroidSchedulers.mainThread())
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -53,7 +31,19 @@ class LoginActivity : AppCompatActivity(), Login.View {
 		loginButton.setOnClickListener { onSignInClicked() }
 	}
 
-	private fun TextView.stringText() = text.toString()
+	override fun showEmptyLoginError() = emptyLoginErrorTextView.show()
+
+	override fun showEmptyPasswordError() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+	override fun openNextScreen() = startActivity(Intent(this, MainActivity::class.java))
+
+	override fun showLoginFailed() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+	override fun showLoader() = Unit
+
+	override fun hideLoader() = Unit
 
 	private fun onSignInClicked() = loginController.onLogin(loginInput.stringText(), passwordInput.stringText())
+
+	private fun TextView.stringText() = text.toString()
 }
