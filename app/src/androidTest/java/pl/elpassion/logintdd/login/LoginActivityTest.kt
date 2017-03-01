@@ -58,4 +58,9 @@ class LoginActivityTest {
         onText(R.string.loginButtonText).click()
         onText(R.string.emptyLogin).isDisplayed()
     }
+
+    @Test
+    fun shouldNotShowEmptyLoginErrorInitially() {
+        onText(R.string.emptyLogin).isNotDisplayed()
+    }
 }
