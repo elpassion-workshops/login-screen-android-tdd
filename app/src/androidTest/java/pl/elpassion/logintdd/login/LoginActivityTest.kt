@@ -53,5 +53,8 @@ class LoginActivityTest {
         onId(R.id.login_empty_error).isDisplayed()
     }
 
-
+    @Test
+    fun shouldNotShowErrorOnIdleState() {
+        onId(R.id.login_empty_error).isNotDisplayed()
+    }
 }
