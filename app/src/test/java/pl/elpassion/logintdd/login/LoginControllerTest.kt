@@ -45,6 +45,12 @@ class LoginControllerTest {
         verify(view, never()).showProgressBar()
     }
 
+    @Test
+    fun `should not show progress bar when password is empty`() {
+        login(password = "")
+        verify(view, never()).showProgressBar()
+    }
+
     private fun login(login: String= "myLogin", password: String = "myPassword") {
         LoginController(view).login(login = login, password = password)
     }
@@ -60,14 +66,10 @@ interface Login {
 
 class LoginController(private val view: Login.View) {
     fun login(login: String, password: String) {
-        if (login.isEmpty()) {
-            view.showLoginEmptyError()
-        } else {
-            view.showProgressBar()
-        }
-
-        if(password.isEmpty()) {
-            view.showPasswordEmptyError()
+        when{
+            login.isEmpty() -> view.showLoginEmptyError()
+            password.isEmpty() -> view.showPasswordEmptyError()
+            else -> view.showProgressBar()
         }
     }
 }
