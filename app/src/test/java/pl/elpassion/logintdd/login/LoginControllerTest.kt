@@ -5,6 +5,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
+import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.verify
@@ -13,10 +14,11 @@ class LoginControllerTest {
 
     private val view = mock<Login.View>()
     private val api = mock<Login.Api>()
+    private val loginSubject = SingleSubject.create<Unit>()
 
     @Before
     fun setUp() {
-        whenever(api.login(any(), any())).thenReturn(Single.just(Unit))
+        whenever(api.login(any(), any())).thenReturn(loginSubject)
     }
 
     @Test
@@ -77,7 +79,15 @@ class LoginControllerTest {
     @Test
     fun `should open next screen on successful login`() {
         login()
+        loginSubject.onSuccess(Unit)
         verify(view).openNextScreen()
+    }
+    
+    @Test
+    fun `should show error on unsuccessful login`() {
+        login()
+        loginSubject.onError(RuntimeException())
+        verify(view).showLoginError()
     }
     
     private fun login(login: String = "login", password: String = "password") {
@@ -90,6 +100,7 @@ interface Login {
         fun showLoginEmptyError()
         fun showPasswordEmptyError()
         fun openNextScreen()
+        fun showLoginError()
     }
 
     interface Api {
@@ -113,6 +124,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
     private fun performApiLogin(login: String, password: String) {
         api
                 .login(login, password)
+                .doOnError { view.showLoginError() }
                 .subscribe { result -> view.openNextScreen() }
     }
 }
