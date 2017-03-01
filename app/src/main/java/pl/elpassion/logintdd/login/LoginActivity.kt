@@ -10,35 +10,27 @@ import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.logintdd.MainActivity
 import pl.elpassion.logintdd.R
 
-class LoginActivity : AppCompatActivity(), Login.View{
+class LoginActivity : AppCompatActivity(), Login.View {
     lateinit var loginController: LoginController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
-        loginController = LoginController(Login.ApiProvider.get(), this, object: Login.UserRepository{}, Schedulers.io(), AndroidSchedulers.mainThread())
+        loginController = LoginController(Login.ApiProvider.get(), this, object : Login.UserRepository {}, Schedulers.io(), AndroidSchedulers.mainThread())
         setOnClickListener()
     }
 
-    private fun setOnClickListener() {
-        loginButton.setOnClickListener {
-            loginController.onLogin(login = loginInput.text.toString(), password = passwordInput.text.toString())
-        }
+    private fun setOnClickListener() = loginButton.setOnClickListener {
+        loginController.onLogin(login = loginInput.text.toString(), password = passwordInput.text.toString())
     }
 
-    override fun showEmptyLoginError() {
-        loginEmptyError.show()
-    }
+    override fun showEmptyLoginError() = loginEmptyError.show()
 
-    override fun showEmptyPasswordError() {
-        passwordEmptyError.show()
-    }
+    override fun showEmptyPasswordError() = passwordEmptyError.show()
 
     override fun openNextScreen() = startActivity(Intent(this, MainActivity::class.java))
 
-    override fun showLoginFailed() {
-        loginError.show()
-    }
+    override fun showLoginFailed() = loginError.show()
 
     override fun showLoader() {}
 

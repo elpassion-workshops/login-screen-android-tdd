@@ -25,7 +25,6 @@ class LoginActivityTest {
             Login.ApiProvider.override = mock<Login.Api>().apply {
                 whenever(login(any(), any())).thenReturn(userSubject)
             }
-
         }
     }
 
@@ -99,13 +98,9 @@ class LoginActivityTest {
         checkIntent(MainActivity::class.java)
     }
 
-    private fun mockApiSuccess() {
-        userSubject.onSuccess(User(4))
-    }
+    private fun mockApiSuccess() = userSubject.onSuccess(User(4))
 
-    private fun mockApiError() {
-        userSubject.onError(RuntimeException())
-    }
+    private fun mockApiError() = userSubject.onError(RuntimeException())
 
     private fun login() {
         onId(R.id.loginInput).typeText("login")
@@ -114,6 +109,4 @@ class LoginActivityTest {
     }
 }
 
-private fun ViewInteraction.isSecure() {
-    check(matches(withInputType(TYPE_TEXT_VARIATION_PASSWORD or TYPE_CLASS_TEXT)))
-}
+private fun ViewInteraction.isSecure() = check(matches(withInputType(TYPE_TEXT_VARIATION_PASSWORD or TYPE_CLASS_TEXT)))
