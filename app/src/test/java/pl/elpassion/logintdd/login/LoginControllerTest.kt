@@ -27,6 +27,12 @@ class LoginControllerTest {
         verify(view).showPasswordEmptyError()
     }
 
+    @Test
+    fun shouldShowNotErrorWhenPasswordIsNotEmpty() {
+        login(password = "password")
+        verify(view, never()).showPasswordEmptyError()
+    }
+
     private fun login(login: String = "login", password: String = "password") {
         LoginController(view).login(login = login, password = password)
     }
@@ -43,8 +49,8 @@ class LoginController(private val view: Login.View) {
     fun login(login: String, password: String) {
         if (login.isEmpty()) {
             view.showLoginEmptyError()
-        }
+        } else if (password.isEmpty()) {
             view.showPasswordEmptyError()
-
+        }
     }
 }
