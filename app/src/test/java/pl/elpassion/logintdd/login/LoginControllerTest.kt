@@ -72,7 +72,7 @@ class LoginController(private val view: Login.View, private val api: Login.Api) 
             view.showPasswordEmptyError()
         }
 
-        if (!login.isEmpty()) {
+        if (login.isNotEmpty()) {
             api.loginUser()
         }
     }
