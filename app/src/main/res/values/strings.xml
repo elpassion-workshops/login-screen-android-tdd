@@ -4,4 +4,5 @@
     <string name="email">E-mail</string>
     <string name="password">Password</string>
     <string name="login_error">Login empty!</string>
+    <string name="password_error">PLEASE PUT PASSWORD</string>
 </resources>

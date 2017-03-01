@@ -36,6 +36,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
 
     override fun showEmptyPasswordError() {
         error.visibility = View.VISIBLE
+        error.text = getText(R.string.password_error)
     }
 
     override fun openNextScreen() {
