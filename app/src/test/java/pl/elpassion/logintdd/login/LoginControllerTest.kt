@@ -8,6 +8,7 @@ import org.mockito.Mockito.verify
 class LoginControllerTest {
 
     private val view = mock<Login.View>()
+    private val api = mock<Login.Api>()
 
     @Test
     fun shouldShowEmptyLoginError() {
@@ -39,6 +40,12 @@ class LoginControllerTest {
         verify(view).showLoader()
     }
 
+    @Test
+    fun shouldNotPerformApiCallIfLoginEmpty() {
+        login(login = "")
+        verify(api, never()).performApiCall()
+    }
+
     private fun login(login: String = "myLogin", password: String = "password") {
         LoginController(view).login(login = login, password = password)
     }
@@ -49,6 +56,10 @@ interface Login {
         fun showLoginEmptyError()
         fun showPasswordEmptyError()
         fun showLoader()
+    }
+
+    interface Api {
+        fun performApiCall()
     }
 }
 
