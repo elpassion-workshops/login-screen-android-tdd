@@ -71,4 +71,12 @@ class LoginActivityTest {
     fun shouldNotShowPasswordErrorOnStart() {
         onId(R.id.passwordError).isNotDisplayed()
     }
+
+    @Test
+    fun shouldShowProgressWhenLogin() {
+        onId(R.id.loginInput).typeText("login")
+        onId(R.id.passwordInput).typeText("MargaretTatcherIs100%Sexy")
+        onId(R.id.loginButton).click()
+        onId(R.id.progress).isDisplayed()
+    }
 }
